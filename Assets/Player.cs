@@ -33,6 +33,14 @@ public class Player : MonoBehaviour
     [SerializeField] Vector2 knockBackSpeed;
     bool isKnocked;
 
+    [Header("Buffer Jump")]
+    [SerializeField] float bufferJumpWindow;
+    float bufferInputReceived = -1; // Set to <= -bufferJumpWindow
+
+    [Header("Coyote Jump")]
+    [SerializeField] float coyoteJumpWindow;
+    float wentOffTheGroundAt = -1; // Set to <= -coyoteJumpWindow
+
     bool facingRight = true;
 
 
@@ -100,6 +108,7 @@ public class Player : MonoBehaviour
     private void Jump()
     {
         rb.velocity = new Vector2(xInput, jumpSpeed);
+        canDoubleJump = true;
     }
 
     private void DoubleJump()
@@ -146,27 +155,47 @@ public class Player : MonoBehaviour
         if (isWallDetected || isOnGround)
         {
             isWallJumping = false;
+            wentOffTheGroundAt = -1;
         }
+        if (!isOnGround && rb.velocity.y < 0 && wentOffTheGroundAt == -1) wentOffTheGroundAt = Time.time;
         if (jumpInput)
         {
             if (isOnGround)
             {
+                //print("Normal Jump!!");
                 Jump();
-                canDoubleJump = true;
             }
             else if (isWallDetected)
             {
+                //print("Wall Jump!!");
                 WallJump();
             }
             else if (canDoubleJump)
             {
+                //print("Double Jump!!");
                 isWallJumping = false;
                 DoubleJump();
                 canDoubleJump = false;
             }
+            else
+            {
+                bufferInputReceived = Time.time;
+                if (Time.time < wentOffTheGroundAt + coyoteJumpWindow)
+                {
+                    //print("Coyote Jump!!");
+                    wentOffTheGroundAt = -1;
+                    Jump();
+                }
+            }
+            wentOffTheGroundAt = -2;
+        }
+        if (isOnGround && Time.time < bufferInputReceived + bufferJumpWindow)
+        {
+            //print("Buffered Jump!!");
+            bufferInputReceived = -1;   // Should be set to <= -bufferJumpWindow
+            Jump();
         }
     }
-
 
     void OnDrawGizmos()
     {

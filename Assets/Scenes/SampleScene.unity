@@ -242,6 +242,8 @@ MonoBehaviour:
   wallJumpSpeed: {x: 8, y: 15}
   knockBackDuration: 0.65
   knockBackSpeed: {x: 5, y: 7}
+  bufferJumpWindow: 0.2
+  coyoteJumpWindow: 0.2
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
