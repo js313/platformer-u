@@ -11,15 +11,30 @@ public class Player : MonoBehaviour
     [Header("Movement")]
     [SerializeField] float speed;
     [SerializeField] float jumpSpeed;
+    [SerializeField] float doubleJumpSpeed;
     float xInput;
+    float yInput;
+    bool jumpInput;
+    bool canDoubleJump = true;
 
     [Header("Collision")]
     [SerializeField] float groundCheckDistance;
+    [SerializeField] float wallCheckDistance;
     [SerializeField] LayerMask whatIsGround;
     bool isOnGround;
 
+    [Header("Wall")]
+    [SerializeField] Vector2 wallJumpSpeed;
+    private bool isWallJumping;
+    bool isWallDetected, wallDetectionStopped = false;
+
+    [Header("Knockback")]
+    [SerializeField] float knockBackDuration;
+    [SerializeField] Vector2 knockBackSpeed;
+    bool isKnocked;
+
     bool facingRight = true;
-    int facingDir = 1;
+
 
     void Awake()
     {
@@ -29,11 +44,39 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        HandleCollision();
+        if (isKnocked) return;  // Prevent movemnt of any kind while knocked
+
         HandleInput();
+        HandleWallSlide();
         HandleMovement();
         HandleFlip();
+        // There is a very very small glitch with player when exiting the wall slide anim, to fix that keep below HandleFlip()
+        HandleCollision();
         HandleAnimation();
+    }
+
+    public void KnockBack()
+    {
+        if (isKnocked) return;
+        StartCoroutine(KnockBackRoutine());
+        rb.velocity = new Vector2(knockBackSpeed.x * -Math.Sign(transform.right.x), knockBackSpeed.y);
+        anim.SetTrigger("knockback");
+    }
+
+    IEnumerator KnockBackRoutine()
+    {
+        isKnocked = true;
+        yield return new WaitForSeconds(knockBackDuration);
+        isKnocked = false;
+    }
+
+    void HandleWallSlide()
+    {
+        float yVelocityModifier = yInput < 0 ? 1f : 0.5f;
+        if (isWallDetected && rb.velocity.y < 0)
+        {
+            rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * yVelocityModifier);
+        }
     }
 
     private void HandleFlip()
@@ -45,21 +88,45 @@ public class Player : MonoBehaviour
     {
         transform.Rotate(0, 180, 0);
         facingRight = !facingRight;
-        facingDir = -facingDir;
     }
 
     void HandleInput()
     {
         xInput = Input.GetAxisRaw("Horizontal");
-
-        if (Input.GetKeyDown(KeyCode.Space) && isOnGround) Jump();
+        yInput = Input.GetAxisRaw("Vertical");
+        jumpInput = Input.GetKeyDown(KeyCode.Space);
     }
 
-    private void Jump() => rb.velocity = new Vector2(xInput, jumpSpeed);
+    private void Jump()
+    {
+        rb.velocity = new Vector2(xInput, jumpSpeed);
+    }
+
+    private void DoubleJump()
+    {
+        rb.velocity = new Vector2(xInput, doubleJumpSpeed);
+    }
+
+    private void WallJump()
+    {
+        isWallJumping = true;
+        Flip();
+        rb.velocity += new Vector2(wallJumpSpeed.x * Math.Sign(transform.right.x), wallJumpSpeed.y);
+        StartCoroutine(StopWallDetection());
+    }
+
+    IEnumerator StopWallDetection()
+    {
+        float wallDetectionBufferAfterWallJumpInitiated = 0.05f;
+        wallDetectionStopped = true;
+        yield return new WaitForSeconds(wallDetectionBufferAfterWallJumpInitiated);
+        wallDetectionStopped = false;
+    }
 
     void HandleCollision()
     {
         isOnGround = Physics2D.Raycast(transform.position, Vector2.down, groundCheckDistance, whatIsGround);
+        isWallDetected = !wallDetectionStopped && Physics2D.Raycast(transform.position, transform.right, wallCheckDistance, whatIsGround);
     }
 
     void HandleAnimation()
@@ -67,15 +134,43 @@ public class Player : MonoBehaviour
         anim.SetFloat("xVelocity", rb.velocity.x);
         anim.SetFloat("yVelocity", rb.velocity.y);
         anim.SetBool("isOnGround", isOnGround);
+        anim.SetBool("isWallDetected", isWallDetected);
     }
 
     void HandleMovement()
     {
-        rb.velocity = new Vector2(xInput * speed, rb.velocity.y);
+        if (!isWallDetected && !isWallJumping)
+        {
+            rb.velocity = new Vector2(xInput * speed, rb.velocity.y);
+        }
+        if (isWallDetected || isOnGround)
+        {
+            isWallJumping = false;
+        }
+        if (jumpInput)
+        {
+            if (isOnGround)
+            {
+                Jump();
+                canDoubleJump = true;
+            }
+            else if (isWallDetected)
+            {
+                WallJump();
+            }
+            else if (canDoubleJump)
+            {
+                isWallJumping = false;
+                DoubleJump();
+                canDoubleJump = false;
+            }
+        }
     }
+
 
     void OnDrawGizmos()
     {
         Gizmos.DrawLine(transform.position, new Vector2(transform.position.x, transform.position.y - groundCheckDistance));
+        Gizmos.DrawLine(transform.position, new Vector2(transform.position.x + wallCheckDistance, transform.position.y));
     }
 }
