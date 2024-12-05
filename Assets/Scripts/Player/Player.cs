@@ -6,7 +6,10 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     Rigidbody2D rb;
+    Collider2D cd;
     Animator anim;
+
+    bool hasControlAndPhysics = false;
 
     [Header("Movement")]
     [SerializeField] float speed;
@@ -41,18 +44,27 @@ public class Player : MonoBehaviour
     [SerializeField] float coyoteJumpWindow;
     float wentOffTheGroundAt = -1; // Set to <= -coyoteJumpWindow
 
+    [Header("VFX")]
+    [SerializeField] GameObject playerDeathVfx;
+
     bool facingRight = true;
 
 
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        cd = GetComponent<Collider2D>();
         anim = GetComponentInChildren<Animator>();
+    }
+
+    void Start()
+    {
+        RespawnFinished(false);
     }
 
     void Update()
     {
-        if (isKnocked) return;  // Prevent movemnt of any kind while knocked
+        if (isKnocked || !hasControlAndPhysics) return;  // Prevent movemnt of any kind while knocked
 
         HandleInput();
         HandleWallSlide();
@@ -63,12 +75,34 @@ public class Player : MonoBehaviour
         HandleAnimation();
     }
 
+    public void RespawnFinished(bool isFinished)
+    {
+        if (!isFinished)
+        {
+            hasControlAndPhysics = false;
+            rb.bodyType = RigidbodyType2D.Static;
+            cd.enabled = false;
+        }
+        else
+        {
+            hasControlAndPhysics = true;
+            rb.bodyType = RigidbodyType2D.Dynamic;
+            cd.enabled = true;
+        }
+    }
+
     public void KnockBack()
     {
         if (isKnocked) return;
         StartCoroutine(KnockBackRoutine());
         rb.velocity = new Vector2(knockBackSpeed.x * -Math.Sign(transform.right.x), knockBackSpeed.y);
         anim.SetTrigger("knockback");
+    }
+
+    public void Die()
+    {
+        Destroy(gameObject);
+        Instantiate(playerDeathVfx, transform.position, Quaternion.identity);
     }
 
     IEnumerator KnockBackRoutine()
@@ -170,7 +204,7 @@ public class Player : MonoBehaviour
                 //print("Wall Jump!!");
                 WallJump();
             }
-            else if (canDoubleJump)
+            else if (canDoubleJump) // BUG: Something wrong with Double Jump right after wall jump
             {
                 //print("Double Jump!!");
                 isWallJumping = false;
