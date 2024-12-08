@@ -28,7 +28,7 @@ public class Player : MonoBehaviour
 
     [Header("Wall")]
     [SerializeField] Vector2 wallJumpSpeed;
-    private bool isWallJumping;
+    bool isWallJumping;
     bool isWallDetected, wallDetectionStopped = false;
 
     [Header("Knockback")]
@@ -49,7 +49,6 @@ public class Player : MonoBehaviour
 
     bool facingRight = true;
 
-
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -64,6 +63,7 @@ public class Player : MonoBehaviour
 
     void Update()
     {
+        HandleAnimation();
         if (isKnocked || !hasControlAndPhysics) return;  // Prevent movemnt of any kind while knocked
 
         HandleInput();
@@ -72,7 +72,6 @@ public class Player : MonoBehaviour
         HandleFlip();
         // There is a very very small glitch with player when exiting the wall slide anim, to fix that keep below HandleFlip()
         HandleCollision();
-        HandleAnimation();
     }
 
     public void RespawnFinished(bool isFinished)
@@ -91,25 +90,10 @@ public class Player : MonoBehaviour
         }
     }
 
-    public void KnockBack()
-    {
-        if (isKnocked) return;
-        StartCoroutine(KnockBackRoutine());
-        rb.velocity = new Vector2(knockBackSpeed.x * -Math.Sign(transform.right.x), knockBackSpeed.y);
-        anim.SetTrigger("knockback");
-    }
-
     public void Die()
     {
         Destroy(gameObject);
         Instantiate(playerDeathVfx, transform.position, Quaternion.identity);
-    }
-
-    IEnumerator KnockBackRoutine()
-    {
-        isKnocked = true;
-        yield return new WaitForSeconds(knockBackDuration);
-        isKnocked = false;
     }
 
     void HandleWallSlide()
@@ -121,12 +105,12 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void HandleFlip()
+    void HandleFlip()
     {
         if ((xInput < 0 && facingRight) || (xInput > 0 && !facingRight)) Flip();
     }
 
-    private void Flip()
+    void Flip()
     {
         transform.Rotate(0, 180, 0);
         facingRight = !facingRight;
@@ -139,23 +123,24 @@ public class Player : MonoBehaviour
         jumpInput = Input.GetKeyDown(KeyCode.Space);
     }
 
-    private void Jump()
+    void Jump()
     {
         rb.velocity = new Vector2(xInput, jumpSpeed);
         canDoubleJump = true;
     }
 
-    private void DoubleJump()
+    void DoubleJump()
     {
         rb.velocity = new Vector2(xInput, doubleJumpSpeed);
     }
 
-    private void WallJump()
+    void WallJump()
     {
         isWallJumping = true;
         Flip();
         rb.velocity += new Vector2(wallJumpSpeed.x * Math.Sign(transform.right.x), wallJumpSpeed.y);
         StartCoroutine(StopWallDetection());
+        canDoubleJump = true;
     }
 
     IEnumerator StopWallDetection()
@@ -194,6 +179,7 @@ public class Player : MonoBehaviour
         if (!isOnGround && rb.velocity.y < 0 && wentOffTheGroundAt == -1) wentOffTheGroundAt = Time.time;
         if (jumpInput)
         {
+            //print("Input:- ");
             if (isOnGround)
             {
                 //print("Normal Jump!!");
@@ -204,7 +190,7 @@ public class Player : MonoBehaviour
                 //print("Wall Jump!!");
                 WallJump();
             }
-            else if (canDoubleJump) // BUG: Something wrong with Double Jump right after wall jump
+            else if (canDoubleJump)
             {
                 //print("Double Jump!!");
                 isWallJumping = false;
@@ -231,9 +217,42 @@ public class Player : MonoBehaviour
         }
     }
 
+    public void KnockBack(Transform damageTransform)
+    {
+        if (isKnocked) return;
+        StartCoroutine(KnockBackRoutine());
+        Vector2 damageDirection = transform.position - damageTransform.position;
+        rb.velocity = new Vector2(knockBackSpeed.x * Math.Sign(damageDirection.x), knockBackSpeed.y * Math.Sign(damageDirection.y));
+    }
+
+    IEnumerator KnockBackRoutine()
+    {
+        isKnocked = true;
+        anim.SetBool("knockback", true);
+        yield return new WaitForSeconds(knockBackDuration);
+        anim.SetBool("knockback", false);
+        isKnocked = false;
+    }
+
+    public void Push(Vector2 pushDirection, float pushForce, float pushDuration)
+    {
+        rb.velocity = Vector2.zero;
+        StartCoroutine(PushCoroutine(pushDirection, pushForce, pushDuration));
+    }
+
+    IEnumerator PushCoroutine(Vector2 pushDirection, float pushForce, float pushDuration)
+    {
+        hasControlAndPhysics = false;
+        rb.AddForce(pushDirection * pushForce, ForceMode2D.Impulse);
+        yield return new WaitForSeconds(pushDuration);
+        hasControlAndPhysics = true;
+    }
+
     void OnDrawGizmos()
     {
+        // Ground Check Ray
         Gizmos.DrawLine(transform.position, new Vector2(transform.position.x, transform.position.y - groundCheckDistance));
-        Gizmos.DrawLine(transform.position, new Vector2(transform.position.x + wallCheckDistance, transform.position.y));
+        // Wall Check Ray
+        Gizmos.DrawLine(transform.position, new Vector2(transform.position.x + wallCheckDistance * (facingRight ? 1 : -1), transform.position.y));
     }
 }

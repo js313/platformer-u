@@ -73,7 +73,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -183441955
-  m_SortingLayer: 6
+  m_SortingLayer: 7
   m_SortingOrder: 0
   m_Sprite: {fileID: -6367560908665664636, guid: 40de9a8703e2e5a47882b0b86451c741, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -170,12 +170,12 @@ MonoBehaviour:
   jumpSpeed: 14
   doubleJumpSpeed: 12
   groundCheckDistance: 0.8
-  wallCheckDistance: 0.65
+  wallCheckDistance: 0.7
   whatIsGround:
     serializedVersion: 2
     m_Bits: 8
   wallJumpSpeed: {x: 8, y: 15}
-  knockBackDuration: 0.65
+  knockBackDuration: 0.6
   knockBackSpeed: {x: 5, y: 7}
   bufferJumpWindow: 0.2
   coyoteJumpWindow: 0.2
@@ -239,6 +239,6 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.026192904, y: 0.0052385926}
-  m_Size: {x: 1.1914935, y: 1.4819499}
+  m_Offset: {x: 0.0754652, y: 0.0052385926}
+  m_Size: {x: 0.9250412, y: 1.4819499}
   m_Direction: 0
