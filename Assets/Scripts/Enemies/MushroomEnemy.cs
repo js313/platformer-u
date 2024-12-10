@@ -4,22 +4,12 @@ using UnityEngine;
 
 public class MushroomEnemy : Enemy
 {
-    Collider2D cd;
-
-    protected override void Awake()
-    {
-        base.Awake();
-
-        cd = GetComponent<Collider2D>();
-    }
-
     protected override void Update()
     {
         base.Update();
 
         HandleAnimation();
         isIdle = false;
-        if (isDead) cd.enabled = false;
         HandleFlip();
         HandleMovement();
     }

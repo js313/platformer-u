@@ -6,37 +6,48 @@ public class Enemy : MonoBehaviour
 {
     protected Animator anim;
     protected Rigidbody2D rb;
+    protected Collider2D cd;
 
-    [SerializeField] protected DamageTrigger damageTrigger;
-
+    [Header("General")]
     [SerializeField] protected float moveSpeed = 2;
-
     [SerializeField] protected bool facingRight = false;
+    [SerializeField] protected float idleDuration = 1.5f;
+    protected bool isIdle = false;
+    protected float idleTime;
 
     [Header("Collision")]
     [SerializeField] protected float groundCheckDistance = 1;
     [SerializeField] protected float wallCheckDistance = 1;
     [SerializeField] protected LayerMask whatIsGround;
+    [SerializeField] protected LayerMask whatIsPlayer;
     [SerializeField] protected Transform groundCheckOrigin;
-
-    [Header("Death")]
-    [SerializeField] float deathEffectSpeed = 5;
-    [SerializeField] float deathEffectRotation = 100;
-    int deathRotationDirection = 1;
-    protected bool isDead;
-
     protected bool isOnGround = true;
     protected bool isGroundAhead = true;
     protected bool isFacingWall = false;
 
-    protected bool isIdle = false;
-    [SerializeField] protected float idleDuration = 1.5f;
-    protected float idleTime;
+    [Header("Death")]
+    [SerializeField] float deathEffectSpeed = 5;
+    [SerializeField] float deathEffectRotation = 100;
+    [SerializeField] protected DamageTrigger damageTrigger;
+    int deathRotationDirection = 1;
+    protected bool isDead;
+
+    [Header("Attack")]
+    [SerializeField] protected float stopAttackDuration = 0;
+    protected float stopAttackTime = 0;
+    protected bool isAttacking = false;
+    protected Player player;
 
     protected virtual void Awake()
     {
         anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
+        cd = GetComponent<Collider2D>();
+    }
+
+    protected void Start()
+    {
+        player = GameManager.instance.player;
     }
 
     protected virtual void Update()
@@ -44,7 +55,10 @@ public class Enemy : MonoBehaviour
         HandleDeathRotation();
         if (isDead) return;
         HandleCollision();
+        HandleAttack();
     }
+
+    protected virtual void HandleAttack() { }
 
     protected void Flip()
     {
@@ -52,7 +66,7 @@ public class Enemy : MonoBehaviour
         facingRight = !facingRight;
     }
 
-    void HandleCollision()
+    protected virtual void HandleCollision()
     {
         isOnGround = Physics2D.Raycast(transform.position, -transform.up, groundCheckDistance, whatIsGround);
         isGroundAhead = Physics2D.Raycast(groundCheckOrigin.position, -transform.up, groundCheckDistance, whatIsGround);
@@ -62,6 +76,7 @@ public class Enemy : MonoBehaviour
     void HandleDeath()
     {
         isDead = true;
+        cd.enabled = false;
         damageTrigger.gameObject.SetActive(false);
         rb.velocity = new Vector2(0, deathEffectSpeed);
         if (Random.Range(0, 1) >= 0.5f) deathRotationDirection = -1;
@@ -79,7 +94,7 @@ public class Enemy : MonoBehaviour
         HandleDeath();
     }
 
-    void OnDrawGizmos()
+    protected virtual void OnDrawGizmos()
     {
         // Ground Ahead Check Ray
         Gizmos.DrawLine(groundCheckOrigin.position, new Vector2(groundCheckOrigin.position.x, groundCheckOrigin.position.y - groundCheckDistance));
