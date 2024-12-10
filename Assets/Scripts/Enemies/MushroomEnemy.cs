@@ -4,9 +4,13 @@ using UnityEngine;
 
 public class MushroomEnemy : Enemy
 {
+    Collider2D cd;
+
     protected override void Awake()
     {
         base.Awake();
+
+        cd = GetComponent<Collider2D>();
     }
 
     protected override void Update()
@@ -15,6 +19,7 @@ public class MushroomEnemy : Enemy
 
         HandleAnimation();
         isIdle = false;
+        if (isDead) cd.enabled = false;
         HandleFlip();
         HandleMovement();
     }
@@ -29,13 +34,12 @@ public class MushroomEnemy : Enemy
         }
     }
 
-    void HandleAnimation()
-    {
-        anim.SetFloat("xVelocity", rb.velocity.x);
-    }
+    void HandleAnimation() => anim.SetFloat("xVelocity", rb.velocity.x);
 
     void HandleMovement()
     {
+        if (isDead) return;
+
         if (!isOnGround)
         {
             rb.velocity = new Vector2(0, rb.velocity.y);

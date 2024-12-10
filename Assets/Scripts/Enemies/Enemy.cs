@@ -7,7 +7,9 @@ public class Enemy : MonoBehaviour
     protected Animator anim;
     protected Rigidbody2D rb;
 
-    [SerializeField] protected float moveSpeed;
+    [SerializeField] protected DamageTrigger damageTrigger;
+
+    [SerializeField] protected float moveSpeed = 2;
 
     [SerializeField] protected bool facingRight = false;
 
@@ -17,12 +19,18 @@ public class Enemy : MonoBehaviour
     [SerializeField] protected LayerMask whatIsGround;
     [SerializeField] protected Transform groundCheckOrigin;
 
+    [Header("Death")]
+    [SerializeField] float deathEffectSpeed = 5;
+    [SerializeField] float deathEffectRotation = 100;
+    int deathRotationDirection = 1;
+    protected bool isDead;
+
     protected bool isOnGround = true;
     protected bool isGroundAhead = true;
     protected bool isFacingWall = false;
 
     protected bool isIdle = false;
-    [SerializeField] protected float idleDuration;
+    [SerializeField] protected float idleDuration = 1.5f;
     protected float idleTime;
 
     protected virtual void Awake()
@@ -33,6 +41,8 @@ public class Enemy : MonoBehaviour
 
     protected virtual void Update()
     {
+        HandleDeathRotation();
+        if (isDead) return;
         HandleCollision();
     }
 
@@ -47,6 +57,26 @@ public class Enemy : MonoBehaviour
         isOnGround = Physics2D.Raycast(transform.position, -transform.up, groundCheckDistance, whatIsGround);
         isGroundAhead = Physics2D.Raycast(groundCheckOrigin.position, -transform.up, groundCheckDistance, whatIsGround);
         isFacingWall = Physics2D.Raycast(transform.position, transform.right * (facingRight ? 1 : -1), wallCheckDistance, whatIsGround);
+    }
+
+    void HandleDeath()
+    {
+        isDead = true;
+        damageTrigger.gameObject.SetActive(false);
+        rb.velocity = new Vector2(0, deathEffectSpeed);
+        if (Random.Range(0, 1) >= 0.5f) deathRotationDirection = -1;
+    }
+
+    void HandleDeathRotation()
+    {
+        if (!isDead) return;
+        transform.Rotate(0, 0, deathEffectRotation * deathRotationDirection * Time.deltaTime);
+    }
+
+    public void Die()
+    {
+        anim.SetTrigger("hit");
+        HandleDeath();
     }
 
     void OnDrawGizmos()

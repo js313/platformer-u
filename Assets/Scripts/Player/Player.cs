@@ -24,6 +24,9 @@ public class Player : MonoBehaviour
     [SerializeField] float groundCheckDistance;
     [SerializeField] float wallCheckDistance;
     [SerializeField] LayerMask whatIsGround;
+    [SerializeField] LayerMask whatIsEnemy;
+    [SerializeField] Transform enemyDetection;
+    [SerializeField] float enemyDetectionRadius;
     bool isOnGround;
 
     [Header("Wall")]
@@ -69,9 +72,25 @@ public class Player : MonoBehaviour
         HandleInput();
         HandleWallSlide();
         HandleMovement();
+        HandleEnemyDetection();
         HandleFlip();
         // There is a very very small glitch with player when exiting the wall slide anim, to fix that keep below HandleFlip()
         HandleCollision();
+    }
+
+    void HandleEnemyDetection()
+    {
+        if (rb.velocity.y >= 0) return;
+        
+        Collider2D[] enemyColliders = Physics2D.OverlapCircleAll(enemyDetection.position, enemyDetectionRadius, whatIsEnemy);
+
+        foreach (Collider2D enemyCollider in enemyColliders)
+        {
+            Enemy enemy = enemyCollider.GetComponent<Enemy>();
+            if (enemy == null) continue;
+            enemy.Die();
+            Jump();
+        }
     }
 
     public void RespawnFinished(bool isFinished)
@@ -100,9 +119,7 @@ public class Player : MonoBehaviour
     {
         float yVelocityModifier = yInput < 0 ? 1f : 0.5f;
         if (isWallDetected && rb.velocity.y < 0)
-        {
             rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * yVelocityModifier);
-        }
     }
 
     void HandleFlip()
@@ -129,10 +146,7 @@ public class Player : MonoBehaviour
         canDoubleJump = true;
     }
 
-    void DoubleJump()
-    {
-        rb.velocity = new Vector2(xInput, doubleJumpSpeed);
-    }
+    void DoubleJump() => rb.velocity = new Vector2(xInput, doubleJumpSpeed);
 
     void WallJump()
     {
@@ -250,6 +264,8 @@ public class Player : MonoBehaviour
 
     void OnDrawGizmos()
     {
+        // Enemy Damaging Sphere
+        Gizmos.DrawWireSphere(enemyDetection.position, enemyDetectionRadius);
         // Ground Check Ray
         Gizmos.DrawLine(transform.position, new Vector2(transform.position.x, transform.position.y - groundCheckDistance));
         // Wall Check Ray
