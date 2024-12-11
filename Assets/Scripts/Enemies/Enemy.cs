@@ -38,6 +38,10 @@ public class Enemy : MonoBehaviour
     protected bool isAttacking = false;
     protected Player player;
 
+    [Header("Player Detection")]
+    [SerializeField] protected float playerDetectionDistance;
+    protected bool isPlayerInSight = false;
+
     protected virtual void Awake()
     {
         anim = GetComponent<Animator>();
@@ -70,7 +74,7 @@ public class Enemy : MonoBehaviour
     {
         isOnGround = Physics2D.Raycast(transform.position, -transform.up, groundCheckDistance, whatIsGround);
         isGroundAhead = Physics2D.Raycast(groundCheckOrigin.position, -transform.up, groundCheckDistance, whatIsGround);
-        isFacingWall = Physics2D.Raycast(transform.position, transform.right * (facingRight ? 1 : -1), wallCheckDistance, whatIsGround);
+        isFacingWall = Physics2D.Raycast(transform.position, Vector2.right * (facingRight ? 1 : -1), wallCheckDistance, whatIsGround);
     }
 
     void HandleDeath()
@@ -102,5 +106,7 @@ public class Enemy : MonoBehaviour
         Gizmos.DrawLine(transform.position, new Vector2(transform.position.x, transform.position.y - groundCheckDistance));
         // Wall Check Ray
         Gizmos.DrawLine(transform.position, new Vector2(transform.position.x + wallCheckDistance * (facingRight ? 1 : -1), transform.position.y));
+        // Player Detection Ray
+        Gizmos.DrawLine(transform.position, transform.position + (facingRight ? 1 : -1) * playerDetectionDistance * Vector3.right);
     }
 }

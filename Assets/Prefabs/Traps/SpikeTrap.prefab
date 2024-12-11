@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8797051267392784236}
   - component: {fileID: 8574556828557028838}
   - component: {fileID: 2410214376779849169}
-  - component: {fileID: 3598128963747017084}
+  - component: {fileID: 3364210154071162992}
   m_Layer: 0
   m_Name: SpikeTrap
   m_TagString: Untagged
@@ -121,7 +121,7 @@ CircleCollider2D:
   m_Offset: {x: -0.015582085, y: -0.48}
   serializedVersion: 2
   m_Radius: 0.43767166
---- !u!114 &3598128963747017084
+--- !u!114 &3364210154071162992
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -133,3 +133,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb401f0e3cc2001419f15f3bbc94555a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  knockBackDuration: 0.6
+  knockBackSpeed: {x: 5, y: 7}

@@ -34,11 +34,6 @@ public class Player : MonoBehaviour
     bool isWallJumping;
     bool isWallDetected, wallDetectionStopped = false;
 
-    [Header("Knockback")]
-    [SerializeField] float knockBackDuration;
-    [SerializeField] Vector2 knockBackSpeed;
-    bool isKnocked;
-
     [Header("Buffer Jump")]
     [SerializeField] float bufferJumpWindow;
     float bufferInputReceived = -1; // Set to <= -bufferJumpWindow
@@ -50,6 +45,7 @@ public class Player : MonoBehaviour
     [Header("VFX")]
     [SerializeField] GameObject playerDeathVfx;
 
+    bool isKnocked;
     bool facingRight = true;
 
     void Awake()
@@ -81,7 +77,7 @@ public class Player : MonoBehaviour
     void HandleEnemyDetection()
     {
         if (rb.velocity.y >= 0) return;
-        
+
         Collider2D[] enemyColliders = Physics2D.OverlapCircleAll(enemyDetection.position, enemyDetectionRadius, whatIsEnemy);
 
         foreach (Collider2D enemyCollider in enemyColliders)
@@ -231,15 +227,15 @@ public class Player : MonoBehaviour
         }
     }
 
-    public void KnockBack(Transform damageTransform)
+    public void KnockBack(Transform damageTransform, Vector2 knockBackSpeed, float knockBackDuration)
     {
         if (isKnocked) return;
-        StartCoroutine(KnockBackRoutine());
+        StartCoroutine(KnockBackRoutine(knockBackDuration));
         Vector2 damageDirection = transform.position - damageTransform.position;
-        rb.velocity = new Vector2(knockBackSpeed.x * Math.Sign(damageDirection.x), knockBackSpeed.y * Math.Sign(damageDirection.y));
+        rb.velocity = new Vector2(knockBackSpeed.x * Math.Sign(damageDirection.x), knockBackSpeed.y);
     }
 
-    IEnumerator KnockBackRoutine()
+    IEnumerator KnockBackRoutine(float knockBackDuration)
     {
         isKnocked = true;
         anim.SetBool("knockback", true);

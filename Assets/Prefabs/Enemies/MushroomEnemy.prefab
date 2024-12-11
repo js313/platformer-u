@@ -226,18 +226,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d2770b00521da449a8bfff788075fd3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damageTrigger: {fileID: 7083601184515395800}
   moveSpeed: 2
   facingRight: 0
+  idleDuration: 0.5
   groundCheckDistance: 1.1
   wallCheckDistance: 0.7
   whatIsGround:
     serializedVersion: 2
     m_Bits: 8
+  whatIsPlayer:
+    serializedVersion: 2
+    m_Bits: 0
   groundCheckOrigin: {fileID: 6693789478361078373}
   deathEffectSpeed: 5
   deathEffectRotation: 100
-  idleDuration: 0.5
+  damageTrigger: {fileID: 7083601184515395800}
+  stopAttackDuration: 0
 --- !u!1 &4166552892745844324
 GameObject:
   m_ObjectHideFlags: 0
@@ -328,3 +332,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb401f0e3cc2001419f15f3bbc94555a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  knockBackDuration: 0.6
+  knockBackSpeed: {x: 5, y: 7}

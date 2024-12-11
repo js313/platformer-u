@@ -1,12 +1,24 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Chicken : Enemy
+public class Rhino : Enemy
 {
-    [Header("Flip")]
-    [SerializeField] float changeDirectionDelay = 0.2f;
-    bool waitingForFlip = false;
+    [Header("Acceleration")]
+    [SerializeField] float acceleration = 1.5f;
+    [SerializeField] float maxSpeed = 10f;
+    float currentMoveSpeed;
+
+    [Header("Wall Collision")]
+    [SerializeField] Vector2 impactForce;
+    bool wallCollision = false;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        currentMoveSpeed = moveSpeed;
+    }
 
     protected override void Update()
     {
@@ -15,7 +27,26 @@ public class Chicken : Enemy
         HandleAnimation();
         isIdle = false;
         HandleFlip();
+        HandleWallCollision();
         HandleMovement();
+    }
+
+    private void HandleWallCollision()
+    {
+        if (isFacingWall && !isDead)
+        {
+            wallCollision = true;
+            anim.SetBool("hitWall", true);
+            rb.velocity = new Vector2(impactForce.x * (facingRight ? -1 : 1), impactForce.y);
+        }
+    }
+
+    public void EndWallCollision()
+    {
+        wallCollision = false;
+        isAttacking = false;
+        anim.SetBool("hitWall", false);
+        Flip();
     }
 
     protected override void HandleCollision()
@@ -38,26 +69,12 @@ public class Chicken : Enemy
         {
             stopAttackTime -= Time.deltaTime;
             if (stopAttackTime <= 0) { isAttacking = false; }
-
-            if (isAttacking &&
-                Mathf.Sign(player.transform.position.x - transform.position.x) != (facingRight ? 1 : -1) && !waitingForFlip)
-            {
-                StartCoroutine(ChaseFlip());
-            }
         }
-    }
-
-    IEnumerator ChaseFlip()
-    {
-        waitingForFlip = true;
-        yield return new WaitForSeconds(changeDirectionDelay);
-        if (Mathf.Sign(player.transform.position.x - transform.position.x) != (facingRight ? 1 : -1)) Flip();
-        waitingForFlip = false;
     }
 
     void HandleFlip()
     {
-        if (isOnGround && (!isGroundAhead || isFacingWall))
+        if (isOnGround && !isGroundAhead)
         {
             Flip();
             idleTime = idleDuration;
@@ -69,25 +86,33 @@ public class Chicken : Enemy
 
     void HandleMovement()
     {
-        if (isDead) return;
+        if (isDead)
+        {
+            rb.gravityScale = 1;
+            return;
+        }
+        if (wallCollision) return;
 
         if (!isAttacking)
         {
-            rb.velocity = Vector3.zero;
+            currentMoveSpeed = moveSpeed;
+            rb.velocity = new Vector2(0, rb.velocity.y);
             return;
         }
-
         if (!isOnGround)
         {
+            currentMoveSpeed = moveSpeed;
             rb.velocity = new Vector2(0, rb.velocity.y);
             return;
         }
         if (idleTime > 0)
         {
+            currentMoveSpeed = moveSpeed;
             rb.velocity = Vector3.zero;
             idleTime -= Time.deltaTime;
             return;
         }
-        rb.velocity = new Vector2(moveSpeed * (facingRight ? 1 : -1), rb.velocity.y);
+        currentMoveSpeed = Mathf.MoveTowards(currentMoveSpeed, maxSpeed, acceleration * Time.deltaTime);
+        rb.velocity = new Vector2(currentMoveSpeed * (facingRight ? 1 : -1), rb.velocity.y);
     }
 }

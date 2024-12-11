@@ -56,7 +56,7 @@ Transform:
   m_GameObject: {fileID: 1161252086899365572}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 9.24, y: 9.39, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -87,7 +87,7 @@ Transform:
   m_GameObject: {fileID: 2921177038393622047}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 9.36, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -105,8 +105,8 @@ GameObject:
   - component: {fileID: 4424933439631856057}
   - component: {fileID: 3136522843935881014}
   - component: {fileID: 8002831398340369472}
-  - component: {fileID: 1524809524637448251}
   - component: {fileID: 224440503298378445}
+  - component: {fileID: 7886721563255571638}
   m_Layer: 0
   m_Name: SawTrap
   m_TagString: Untagged
@@ -240,18 +240,6 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 1.1875
---- !u!114 &1524809524637448251
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6775279754574401319}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fb401f0e3cc2001419f15f3bbc94555a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &224440503298378445
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -266,3 +254,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 3
   pauseTime: 0.5
+--- !u!114 &7886721563255571638
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6775279754574401319}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb401f0e3cc2001419f15f3bbc94555a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  knockBackDuration: 0.6
+  knockBackSpeed: {x: 5, y: 7}

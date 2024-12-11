@@ -48,8 +48,8 @@ GameObject:
   - component: {fileID: 4535968421656421442}
   - component: {fileID: 6177908247498557089}
   - component: {fileID: 1925742917198410139}
-  - component: {fileID: 6586576159552144220}
   - component: {fileID: 7107110598336019337}
+  - component: {fileID: 6330286166911056609}
   m_Layer: 0
   m_Name: SpikedBall
   m_TagString: Untagged
@@ -186,18 +186,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 0
---- !u!114 &6586576159552144220
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1424827472401051134}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fb401f0e3cc2001419f15f3bbc94555a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &7107110598336019337
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -211,6 +199,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pushForce: 10
+--- !u!114 &6330286166911056609
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1424827472401051134}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb401f0e3cc2001419f15f3bbc94555a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  knockBackDuration: 0.6
+  knockBackSpeed: {x: 5, y: 7}
 --- !u!1 &1800911283967278286
 GameObject:
   m_ObjectHideFlags: 0
