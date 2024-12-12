@@ -265,11 +265,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!4 &92245728 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5608824390440015621, guid: ce3bebfa7f0028b489422887c34a522a, type: 3}
-  m_PrefabInstance: {fileID: 374537419039201080}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &222960319 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1424827472401051134, guid: 2da149f6538d2e54690a6789e904a33d, type: 3}
@@ -675,7 +670,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 352023838}
-  - {fileID: 92245728}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1355508993
@@ -16177,63 +16171,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1fa565a28d2ff324bb7c14ee89361a54, type: 3}
---- !u!1001 &374537419039201080
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 1141542430}
-    m_Modifications:
-    - target: {fileID: 1184213978592289954, guid: ce3bebfa7f0028b489422887c34a522a, type: 3}
-      propertyPath: m_Name
-      value: RhinoEnemy
-      objectReference: {fileID: 0}
-    - target: {fileID: 5608824390440015621, guid: ce3bebfa7f0028b489422887c34a522a, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 5.31
-      objectReference: {fileID: 0}
-    - target: {fileID: 5608824390440015621, guid: ce3bebfa7f0028b489422887c34a522a, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -7.9
-      objectReference: {fileID: 0}
-    - target: {fileID: 5608824390440015621, guid: ce3bebfa7f0028b489422887c34a522a, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5608824390440015621, guid: ce3bebfa7f0028b489422887c34a522a, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5608824390440015621, guid: ce3bebfa7f0028b489422887c34a522a, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5608824390440015621, guid: ce3bebfa7f0028b489422887c34a522a, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5608824390440015621, guid: ce3bebfa7f0028b489422887c34a522a, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5608824390440015621, guid: ce3bebfa7f0028b489422887c34a522a, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5608824390440015621, guid: ce3bebfa7f0028b489422887c34a522a, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5608824390440015621, guid: ce3bebfa7f0028b489422887c34a522a, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: ce3bebfa7f0028b489422887c34a522a, type: 3}
 --- !u!1001 &1823061809670782449
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -16245,6 +16182,10 @@ PrefabInstance:
     - target: {fileID: 1603663084701480495, guid: 8810832f277d5784b92f7aa91278bf1c, type: 3}
       propertyPath: m_Name
       value: MushroomEnemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 1603663084701480495, guid: 8810832f277d5784b92f7aa91278bf1c, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5238413564032714739, guid: 8810832f277d5784b92f7aa91278bf1c, type: 3}
       propertyPath: m_LocalPosition.x

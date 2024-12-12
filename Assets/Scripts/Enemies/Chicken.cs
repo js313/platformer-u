@@ -11,26 +11,18 @@ public class Chicken : Enemy
     protected override void Update()
     {
         base.Update();
-
         HandleAnimation();
         isIdle = false;
+        HandleAttack();
         HandleFlip();
         HandleMovement();
     }
 
-    protected override void HandleCollision()
+    protected void HandleAttack()
     {
-        base.HandleCollision();
-
-        isPlayerInSight = Physics2D.Raycast(transform.position, Vector2.right * (facingRight ? 1 : -1), playerDetectionDistance, whatIsPlayer);
-    }
-
-    protected override void HandleAttack()
-    {
-        base.HandleAttack();
-
         if (isPlayerInSight)
         {
+            idleTime = 0;   // Works because only moves while attacking
             isAttacking = true;
             stopAttackTime = stopAttackDuration;
         }
@@ -39,7 +31,7 @@ public class Chicken : Enemy
             stopAttackTime -= Time.deltaTime;
             if (stopAttackTime <= 0) { isAttacking = false; }
 
-            if (isAttacking &&
+            if (!isIdle && !isDead && isAttacking &&
                 Mathf.Sign(player.transform.position.x - transform.position.x) != (facingRight ? 1 : -1) && !waitingForFlip)
             {
                 StartCoroutine(ChaseFlip());
@@ -51,7 +43,7 @@ public class Chicken : Enemy
     {
         waitingForFlip = true;
         yield return new WaitForSeconds(changeDirectionDelay);
-        if (Mathf.Sign(player.transform.position.x - transform.position.x) != (facingRight ? 1 : -1)) Flip();
+        if (!isIdle && !isDead && Mathf.Sign(player.transform.position.x - transform.position.x) != (facingRight ? 1 : -1)) Flip();
         waitingForFlip = false;
     }
 
@@ -62,6 +54,7 @@ public class Chicken : Enemy
             Flip();
             idleTime = idleDuration;
             isIdle = true;
+            isAttacking = false;
         }
     }
 
@@ -73,10 +66,9 @@ public class Chicken : Enemy
 
         if (!isAttacking)
         {
-            rb.velocity = Vector3.zero;
+            rb.velocity = new Vector2(0, rb.velocity.y);
             return;
         }
-
         if (!isOnGround)
         {
             rb.velocity = new Vector2(0, rb.velocity.y);
@@ -88,6 +80,7 @@ public class Chicken : Enemy
             idleTime -= Time.deltaTime;
             return;
         }
+
         rb.velocity = new Vector2(moveSpeed * (facingRight ? 1 : -1), rb.velocity.y);
     }
 }

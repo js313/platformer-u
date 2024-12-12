@@ -52,6 +52,8 @@ public class Enemy : MonoBehaviour
     protected void Start()
     {
         player = GameManager.instance.player;
+
+        if (transform.eulerAngles.y == 180) facingRight = !facingRight;
     }
 
     protected virtual void Update()
@@ -59,10 +61,19 @@ public class Enemy : MonoBehaviour
         HandleDeathRotation();
         if (isDead) return;
         HandleCollision();
-        HandleAttack();
+        //HandleAttack();
     }
 
-    protected virtual void HandleAttack() { }
+    //protected virtual void HandleAttack() { }
+
+    [ContextMenu("Flip facing direction")]
+    public void ChangeDefaultFacingDirection()
+    {
+        float newRotation = transform.rotation.eulerAngles.y == 180 ? 0 : 180;
+        transform.eulerAngles = new Vector3(transform.eulerAngles.x,
+                                            newRotation,
+                                            transform.eulerAngles.z);
+    }
 
     protected void Flip()
     {
@@ -75,6 +86,7 @@ public class Enemy : MonoBehaviour
         isOnGround = Physics2D.Raycast(transform.position, -transform.up, groundCheckDistance, whatIsGround);
         isGroundAhead = Physics2D.Raycast(groundCheckOrigin.position, -transform.up, groundCheckDistance, whatIsGround);
         isFacingWall = Physics2D.Raycast(transform.position, Vector2.right * (facingRight ? 1 : -1), wallCheckDistance, whatIsGround);
+        isPlayerInSight = Physics2D.Raycast(transform.position, Vector2.right * (facingRight ? 1 : -1), playerDetectionDistance, whatIsPlayer);
     }
 
     void HandleDeath()

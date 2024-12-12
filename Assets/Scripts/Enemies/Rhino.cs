@@ -23,7 +23,7 @@ public class Rhino : Enemy
     protected override void Update()
     {
         base.Update();
-
+        HandleAttack();
         HandleAnimation();
         isIdle = false;
         HandleFlip();
@@ -49,17 +49,8 @@ public class Rhino : Enemy
         Flip();
     }
 
-    protected override void HandleCollision()
+    protected void HandleAttack()
     {
-        base.HandleCollision();
-
-        isPlayerInSight = Physics2D.Raycast(transform.position, Vector2.right * (facingRight ? 1 : -1), playerDetectionDistance, whatIsPlayer);
-    }
-
-    protected override void HandleAttack()
-    {
-        base.HandleAttack();
-
         if (isPlayerInSight)
         {
             isAttacking = true;
