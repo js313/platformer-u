@@ -29,6 +29,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] float deathEffectSpeed = 5;
     [SerializeField] float deathEffectRotation = 100;
     [SerializeField] protected DamageTrigger damageTrigger;
+    [SerializeField] float destroyAfter = 10;
     int deathRotationDirection = 1;
     protected bool isDead;
 
@@ -61,10 +62,7 @@ public class Enemy : MonoBehaviour
         HandleDeathRotation();
         if (isDead) return;
         HandleCollision();
-        //HandleAttack();
     }
-
-    //protected virtual void HandleAttack() { }
 
     [ContextMenu("Flip facing direction")]
     public void ChangeDefaultFacingDirection()
@@ -89,13 +87,14 @@ public class Enemy : MonoBehaviour
         isPlayerInSight = Physics2D.Raycast(transform.position, Vector2.right * (facingRight ? 1 : -1), playerDetectionDistance, whatIsPlayer);
     }
 
-    void HandleDeath()
+    protected virtual void HandleDeath()
     {
         isDead = true;
         cd.enabled = false;
         damageTrigger.gameObject.SetActive(false);
         rb.velocity = new Vector2(0, deathEffectSpeed);
         if (Random.Range(0, 1) >= 0.5f) deathRotationDirection = -1;
+        Destroy(gameObject, destroyAfter);
     }
 
     void HandleDeathRotation()
