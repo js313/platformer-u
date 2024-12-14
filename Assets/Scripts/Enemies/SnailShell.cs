@@ -51,6 +51,6 @@ public class SnailShell : Enemy
     {
         if (isDead || isIdle) return;
 
-        rb.velocity = new Vector2(moveSpeed * (facingRight ? 1 : -1), rb.velocity.y);
+        rb.linearVelocity = new Vector2(moveSpeed * (facingRight ? 1 : -1), rb.linearVelocity.y);
     }
 }

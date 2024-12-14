@@ -76,7 +76,7 @@ public class Player : MonoBehaviour
 
     void HandleEnemyDetection()
     {
-        if (rb.velocity.y >= 0) return;
+        if (rb.linearVelocity.y >= 0) return;
 
         Collider2D[] enemyColliders = Physics2D.OverlapCircleAll(enemyDetection.position, enemyDetectionRadius, whatIsEnemy);
 
@@ -114,8 +114,8 @@ public class Player : MonoBehaviour
     void HandleWallSlide()
     {
         float yVelocityModifier = yInput < 0 ? 1f : 0.5f;
-        if (isWallDetected && rb.velocity.y < 0)
-            rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * yVelocityModifier);
+        if (isWallDetected && rb.linearVelocity.y < 0)
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, rb.linearVelocity.y * yVelocityModifier);
     }
 
     void HandleFlip()
@@ -138,17 +138,17 @@ public class Player : MonoBehaviour
 
     void Jump()
     {
-        rb.velocity = new Vector2(xInput, jumpSpeed);
+        rb.linearVelocity = new Vector2(xInput, jumpSpeed);
         canDoubleJump = true;
     }
 
-    void DoubleJump() => rb.velocity = new Vector2(xInput, doubleJumpSpeed);
+    void DoubleJump() => rb.linearVelocity = new Vector2(xInput, doubleJumpSpeed);
 
     void WallJump()
     {
         isWallJumping = true;
         Flip();
-        rb.velocity += new Vector2(wallJumpSpeed.x * Math.Sign(transform.right.x), wallJumpSpeed.y);
+        rb.linearVelocity += new Vector2(wallJumpSpeed.x * Math.Sign(transform.right.x), wallJumpSpeed.y);
         StartCoroutine(StopWallDetection());
         canDoubleJump = true;
     }
@@ -169,8 +169,8 @@ public class Player : MonoBehaviour
 
     void HandleAnimation()
     {
-        anim.SetFloat("xVelocity", rb.velocity.x);
-        anim.SetFloat("yVelocity", rb.velocity.y);
+        anim.SetFloat("xVelocity", rb.linearVelocity.x);
+        anim.SetFloat("yVelocity", rb.linearVelocity.y);
         anim.SetBool("isOnGround", isOnGround);
         anim.SetBool("isWallDetected", isWallDetected);
     }
@@ -179,14 +179,14 @@ public class Player : MonoBehaviour
     {
         if (!isWallDetected && !isWallJumping)
         {
-            rb.velocity = new Vector2(xInput * speed, rb.velocity.y);
+            rb.linearVelocity = new Vector2(xInput * speed, rb.linearVelocity.y);
         }
         if (isWallDetected || isOnGround)
         {
             isWallJumping = false;
             wentOffTheGroundAt = -1;
         }
-        if (!isOnGround && rb.velocity.y < 0 && wentOffTheGroundAt == -1) wentOffTheGroundAt = Time.time;
+        if (!isOnGround && rb.linearVelocity.y < 0 && wentOffTheGroundAt == -1) wentOffTheGroundAt = Time.time;
         if (jumpInput)
         {
             //print("Input:- ");
@@ -232,7 +232,7 @@ public class Player : MonoBehaviour
         if (isKnocked) return;
         StartCoroutine(KnockBackRoutine(knockBackDuration));
         Vector2 damageDirection = transform.position - damageTransform.position;
-        rb.velocity = new Vector2(knockBackSpeed.x * Math.Sign(damageDirection.x), knockBackSpeed.y);
+        rb.linearVelocity = new Vector2(knockBackSpeed.x * Math.Sign(damageDirection.x), knockBackSpeed.y);
     }
 
     IEnumerator KnockBackRoutine(float knockBackDuration)
@@ -246,7 +246,7 @@ public class Player : MonoBehaviour
 
     public void Push(Vector2 pushDirection, float pushForce, float pushDuration)
     {
-        rb.velocity = Vector2.zero;
+        rb.linearVelocity = Vector2.zero;
         StartCoroutine(PushCoroutine(pushDirection, pushForce, pushDuration));
     }
 

@@ -37,7 +37,7 @@ public class Rhino : Enemy
         {
             wallCollision = true;
             anim.SetBool("hitWall", true);
-            rb.velocity = new Vector2(impactForce.x * (facingRight ? -1 : 1), impactForce.y);
+            rb.linearVelocity = new Vector2(impactForce.x * (facingRight ? -1 : 1), impactForce.y);
         }
     }
 
@@ -73,7 +73,7 @@ public class Rhino : Enemy
         }
     }
 
-    void HandleAnimation() => anim.SetFloat("xVelocity", isAttacking ? rb.velocity.x : 0);
+    void HandleAnimation() => anim.SetFloat("xVelocity", isAttacking ? rb.linearVelocity.x : 0);
 
     void HandleMovement()
     {
@@ -87,23 +87,23 @@ public class Rhino : Enemy
         if (!isAttacking)
         {
             currentMoveSpeed = moveSpeed;
-            rb.velocity = new Vector2(0, rb.velocity.y);
+            rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
             return;
         }
         if (!isOnGround)
         {
             currentMoveSpeed = moveSpeed;
-            rb.velocity = new Vector2(0, rb.velocity.y);
+            rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
             return;
         }
         if (idleTime > 0)
         {
             currentMoveSpeed = moveSpeed;
-            rb.velocity = Vector3.zero;
+            rb.linearVelocity = Vector3.zero;
             idleTime -= Time.deltaTime;
             return;
         }
         currentMoveSpeed = Mathf.MoveTowards(currentMoveSpeed, maxSpeed, acceleration * Time.deltaTime);
-        rb.velocity = new Vector2(currentMoveSpeed * (facingRight ? 1 : -1), rb.velocity.y);
+        rb.linearVelocity = new Vector2(currentMoveSpeed * (facingRight ? 1 : -1), rb.linearVelocity.y);
     }
 }

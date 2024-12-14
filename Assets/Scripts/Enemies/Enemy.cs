@@ -92,7 +92,7 @@ public class Enemy : MonoBehaviour
         isDead = true;
         cd.enabled = false;
         damageTrigger.gameObject.SetActive(false);
-        rb.velocity = new Vector2(0, deathEffectSpeed);
+        rb.linearVelocity = new Vector2(0, deathEffectSpeed);
         if (Random.Range(0, 1) >= 0.5f) deathRotationDirection = -1;
         Destroy(gameObject, destroyAfter);
     }

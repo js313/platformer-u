@@ -24,7 +24,7 @@ public class Mushroom : Enemy
         }
     }
 
-    void HandleAnimation() => anim.SetFloat("xVelocity", rb.velocity.x);
+    void HandleAnimation() => anim.SetFloat("xVelocity", rb.linearVelocity.x);
 
     void HandleMovement()
     {
@@ -32,15 +32,15 @@ public class Mushroom : Enemy
 
         if (!isOnGround)
         {
-            rb.velocity = new Vector2(0, rb.velocity.y);
+            rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
             return;
         }
         if (idleTime > 0)
         {
-            rb.velocity = Vector3.zero;
+            rb.linearVelocity = Vector3.zero;
             idleTime -= Time.deltaTime;
             return;
         }
-        rb.velocity = new Vector2(moveSpeed * (facingRight ? 1 : -1), rb.velocity.y);
+        rb.linearVelocity = new Vector2(moveSpeed * (facingRight ? 1 : -1), rb.linearVelocity.y);
     }
 }
