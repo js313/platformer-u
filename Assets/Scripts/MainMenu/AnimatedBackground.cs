@@ -25,8 +25,13 @@ public class AnimatedBackground : MonoBehaviour
         mr.material.mainTextureOffset += movementDirection * Time.deltaTime;
     }
 
+    [ContextMenu("Update Background")]
     void UpdateBackgroundTexture()
     {
-        mr.material.mainTexture = textures[(int) backgroundType];
+        if(!mr)
+        {
+            mr = GetComponent<MeshRenderer>();
+        }
+        mr.sharedMaterial.mainTexture = textures[(int) backgroundType];
     }
 }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -21,6 +22,9 @@ public class GameManager : MonoBehaviour
     [Header("Checkpoints")]
     public bool canCheckpointsBeReActivated = false;
 
+    [Header("Fade")]
+    [SerializeField] float fadeDuration = 1.0f;
+
     void Awake()
     {
         if (instance == null)
@@ -35,8 +39,11 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        GameUI.instance.FadeIn(fadeDuration, null);
         totalFruits = FindObjectsByType<Fruit>(FindObjectsSortMode.None).Length;
     }
+
+    private void LoadTheEndScene() => SceneManager.LoadScene("TheEnd");
 
     public void RespawnPlayer() => StartCoroutine(RespawnCoroutine());
 
@@ -52,4 +59,9 @@ public class GameManager : MonoBehaviour
     public void FruitCollected() => fruitsCollected++;
 
     public bool GetRandomizeFruits() => randomizeFruits;
+
+    public void LevelFinished()
+    {
+        GameUI.instance.FadeOut(fadeDuration, LoadTheEndScene);
+    }
 }
