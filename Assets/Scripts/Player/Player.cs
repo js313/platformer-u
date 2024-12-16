@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Animations;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -44,6 +45,7 @@ public class Player : MonoBehaviour
 
     [Header("VFX")]
     [SerializeField] GameObject playerDeathVfx;
+    [SerializeField] AnimatorOverrideController[] controllers;
 
     bool isKnocked;
     bool facingRight = true;
@@ -58,6 +60,7 @@ public class Player : MonoBehaviour
     void Start()
     {
         RespawnFinished(false);
+        UpdateSkin();
     }
 
     void Update()
@@ -72,6 +75,14 @@ public class Player : MonoBehaviour
         HandleFlip();
         // There is a very very small glitch with player when exiting the wall slide anim, to fix that keep below HandleFlip()
         HandleCollision();
+    }
+
+    void UpdateSkin()
+    {
+        if (SkinManager.instance != null)
+        {
+            anim.runtimeAnimatorController = controllers[SkinManager.instance.selectedSkinIndex];
+        }
     }
 
     void HandleEnemyDetection()
