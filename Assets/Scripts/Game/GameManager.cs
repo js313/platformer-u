@@ -25,6 +25,8 @@ public class GameManager : MonoBehaviour
     [Header("Fade")]
     [SerializeField] float fadeDuration = 1.0f;
 
+    [SerializeField] int currentLevelIndex;
+
     void Awake()
     {
         if (instance == null)
@@ -43,6 +45,7 @@ public class GameManager : MonoBehaviour
         totalFruits = FindObjectsByType<Fruit>(FindObjectsSortMode.None).Length;
     }
 
+    private void LoadNextScene() => SceneManager.LoadScene("Level_" + (currentLevelIndex + 1));
     private void LoadTheEndScene() => SceneManager.LoadScene("TheEnd");
 
     public void RespawnPlayer() => StartCoroutine(RespawnCoroutine());
@@ -62,6 +65,9 @@ public class GameManager : MonoBehaviour
 
     public void LevelFinished()
     {
-        GameUI.instance.FadeOut(fadeDuration, LoadTheEndScene);
+        if (currentLevelIndex < SceneManager.sceneCountInBuildSettings - 2) // Excluding Main menu and End Scene
+            GameUI.instance.FadeOut(fadeDuration, LoadNextScene);
+        else
+            GameUI.instance.FadeOut(fadeDuration, LoadTheEndScene);
     }
 }

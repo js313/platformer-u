@@ -1054,6 +1054,7 @@ MonoBehaviour:
   randomizeFruits: 0
   canCheckpointsBeReActivated: 0
   fadeDuration: 1
+  currentLevelIndex: 3
 --- !u!4 &1356237035
 Transform:
   m_ObjectHideFlags: 0
@@ -16432,11 +16433,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3043279032980329258, guid: 1fa565a28d2ff324bb7c14ee89361a54, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 10.51
+      value: -15.13
       objectReference: {fileID: 0}
     - target: {fileID: 3043279032980329258, guid: 1fa565a28d2ff324bb7c14ee89361a54, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 6.61
+      value: -5.04
       objectReference: {fileID: 0}
     - target: {fileID: 3043279032980329258, guid: 1fa565a28d2ff324bb7c14ee89361a54, type: 3}
       propertyPath: m_LocalPosition.z
