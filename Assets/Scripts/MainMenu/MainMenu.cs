@@ -7,10 +7,13 @@ using UnityEngine.UI;
 public class MainMenu : MonoBehaviour
 {
     public string sceneName;
+    int continueSceneIndex;
 
     Button[] buttons;
 
-    [SerializeField] float fadeDuration = 1.5f;
+    [SerializeField] Button continueButton;
+
+    [SerializeField] float fadeDuration = 0.5f;
     FadeInOut fadeEffect;
 
     [SerializeField] GameObject[] uiElements;
@@ -25,6 +28,8 @@ public class MainMenu : MonoBehaviour
     void Start()
     {
         fadeEffect.Fade(1, 0, fadeDuration, EnableMenuButtons);
+        continueSceneIndex = PlayerPrefs.GetInt("ContinueLevelNumber");
+        if (continueSceneIndex == 0) continueButton.gameObject.SetActive(false);
     }
 
     public void NewGame()
@@ -43,10 +48,21 @@ public class MainMenu : MonoBehaviour
 
     void LoadLevelScene() => SceneManager.LoadScene(sceneName);
 
+    public void LoadLastLevel() => SceneManager.LoadScene("Level_" + continueSceneIndex);
+
     void EnableMenuButtons()
     {
         foreach (Button button in buttons)
         {
+            if (button == continueButton)
+            {
+                if (continueSceneIndex == 0)
+                {
+                    continueButton.gameObject.SetActive(false);
+                    continueButton.enabled = false;
+                    continue;
+                }
+            }
             button.enabled = true;
         }
     }
