@@ -13,11 +13,6 @@ public class LevelButton : MonoBehaviour
     {
         this.levelIndex = levelIndex;
 
-        print(levelIndex);
-        print(fruitsCollected);
-        print(totalFruits);
-        print(bestTime);
-
         levelNumberText.text = "Level " + levelIndex;
         bestTimeText.text = "Best Time: " + (bestTime == 0 ? "- s" : bestTime.ToString("00") + "s");
         fruitsInfoText.text = "Fruits: " + (totalFruits == 0 ? "0/?" : fruitsCollected.ToString() + "/" + totalFruits.ToString());
