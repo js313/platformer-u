@@ -7,8 +7,6 @@ public class FireButton : MonoBehaviour
     Fire fire;
     Animator anim;
 
-    bool isFireActive = true;
-
     void Awake()
     {
         fire = GetComponentInParent<Fire>();
@@ -21,15 +19,7 @@ public class FireButton : MonoBehaviour
 
         if (player != null)
         {
-            if (isFireActive)
-            {
-                fire.TurnOffFire();
-            }
-            else
-            {
-                fire.TurnOnFire();
-            }
-            isFireActive = !isFireActive;
+            fire.ToggleFire();
             anim.SetTrigger("toggle");
         }
     }

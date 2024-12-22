@@ -22,10 +22,16 @@ public class Fire : MonoBehaviour
         anim.SetBool("active", true);
     }
 
-    public void TurnOffFire()
+    public void ToggleFire()
     {
-        if (!isActive) return;
+        if (isActive)
+            TurnOffFire();
+        else
+            TurnOnFire();
+    }
 
+    void TurnOffFire()
+    {
         cd.enabled = false;
         isActive = false;
         anim.SetBool("active", false);
@@ -33,10 +39,8 @@ public class Fire : MonoBehaviour
         Invoke(nameof(TurnOnFire), turnBackOnTime);
     }
 
-    public void TurnOnFire()
+    void TurnOnFire()
     {
-        if (isActive) return;
-
         cd.enabled = true;
         isActive = true;
         anim.SetBool("active", true);

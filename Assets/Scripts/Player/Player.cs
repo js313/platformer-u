@@ -268,6 +268,7 @@ public class Player : MonoBehaviour
     public void KnockBack(Transform damageTransform, Vector2 knockBackSpeed, float knockBackDuration)
     {
         if (isKnocked) return;
+        CameraManager.instance.ScreenShake();
         StartCoroutine(KnockBackRoutine(knockBackDuration));
         Vector2 damageDirection = transform.position - damageTransform.position;
         rb.linearVelocity = new Vector2(knockBackSpeed.x * Math.Sign(damageDirection.x), knockBackSpeed.y);
