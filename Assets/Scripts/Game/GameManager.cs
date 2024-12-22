@@ -24,13 +24,14 @@ public class GameManager : MonoBehaviour
     public bool canCheckpointsBeReActivated = false;
 
     [Header("Fade")]
-    [SerializeField] float fadeDuration = 1.0f;
+    [SerializeField] float fadeDuration = 0.75f;
 
     [SerializeField] int currentLevelIndex;
     int nextLevelIndex;
 
     float levelTimer = 0;
     GameUI gameUI;
+    public bool isGamePaused { get; private set; }
 
     void Awake()
     {
@@ -62,8 +63,16 @@ public class GameManager : MonoBehaviour
         gameUI.UpdateTimer(levelTimer);
     }
 
+    public void RestartLevel()
+    {
+        gameUI.FadeOut(fadeDuration, LoadCurrentScene);
+    }
+
+    private void LoadCurrentScene() => SceneManager.LoadScene("Level_" + currentLevelIndex);
     private void LoadNextScene() => SceneManager.LoadScene("Level_" + (nextLevelIndex));
     private void LoadTheEndScene() => SceneManager.LoadScene("TheEnd");
+
+    public void PauseUnpauseGame(bool isPaused) => isGamePaused = isPaused;
 
     public void RespawnPlayer() => StartCoroutine(RespawnCoroutine());
 
@@ -79,6 +88,12 @@ public class GameManager : MonoBehaviour
     public void FruitCollected()
     {
         fruitsCollected++;
+        gameUI.UpdateFruitCounter(fruitsCollected, totalFruits);
+    }
+
+    public void FruitDropped()
+    {
+        fruitsCollected--;
         gameUI.UpdateFruitCounter(fruitsCollected, totalFruits);
     }
 

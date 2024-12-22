@@ -1,7 +1,6 @@
 using System;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 [Serializable]
 struct Skin
@@ -52,14 +51,15 @@ public class SkinSelection : MonoBehaviour
         UpdateSkin();
     }
 
-    public void OnSkinSelect()
+    public void OnSkinSelect(GameObject uiElementToEnable)
     {
-        SkinManager.instance.selectedSkinIndex = skinIndex;
         if (skins[skinIndex].unlocked)
         {
-            menu.NewGame();
+            SkinManager.instance.selectedSkinIndex = skinIndex;
+            PlayerPrefs.SetInt("LastSkinPlayed", skinIndex);
+            menu.SwitchUI(uiElementToEnable);
         }
-        else
+        if (!skins[skinIndex].unlocked)
         {
             int remainingBankBalance = PlayerPrefs.GetInt("FruitsInBank") - skins[skinIndex].skinPrice;
             if (remainingBankBalance < 0) return;

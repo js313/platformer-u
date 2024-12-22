@@ -12,10 +12,50 @@ public class GameUI : MonoBehaviour
     [SerializeField] TextMeshProUGUI fruitCounter;
     [SerializeField] TextMeshProUGUI timer;
 
+    [SerializeField] GameObject pauseUI;
+    bool isGamePaused = false;
+
     void Awake()
     {
         if (instance == null) instance = this;
         fadeEffect = GetComponentInChildren<FadeInOut>();
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            isGamePaused = !isGamePaused;
+            if (isGamePaused) PauseGame();
+            else UnPauseGame();
+        }
+    }
+
+    void PauseGame()
+    {
+        isGamePaused = true;
+        GameManager.instance.PauseUnpauseGame(isGamePaused);
+        Time.timeScale = 0.0f;
+        pauseUI.SetActive(isGamePaused);
+    }
+
+    void UnPauseGame()
+    {
+        isGamePaused = false;
+        GameManager.instance.PauseUnpauseGame(isGamePaused);
+        Time.timeScale = 1.0f;
+        pauseUI.SetActive(isGamePaused);
+    }
+
+    public void ResumeGame()
+    {
+        UnPauseGame();
+    }
+
+    public void MainMenu()
+    {
+        UnPauseGame();
+        SceneManager.LoadScene("MainMenu");
     }
 
     public void UpdateFruitCounter(int fruitsCollected, int totalFruits)

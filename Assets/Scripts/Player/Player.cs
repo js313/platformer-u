@@ -10,6 +10,9 @@ public class Player : MonoBehaviour
     Collider2D cd;
     Animator anim;
 
+    GameManager gameManager;
+    DifficultyManager difficultyManager;
+
     bool hasControlAndPhysics = false;
 
     [Header("Movement")]
@@ -59,12 +62,15 @@ public class Player : MonoBehaviour
 
     void Start()
     {
+        difficultyManager = DifficultyManager.instance;
+        gameManager = GameManager.instance;
         RespawnFinished(false);
         UpdateSkin();
     }
 
     void Update()
     {
+        if (gameManager.isGamePaused) return;
         HandleAnimation();
         if (isKnocked || !hasControlAndPhysics) return;  // Prevent movemnt of any kind while knocked
 
@@ -75,6 +81,27 @@ public class Player : MonoBehaviour
         HandleFlip();
         // There is a very very small glitch with player when exiting the wall slide anim, to fix that keep below HandleFlip()
         HandleCollision();
+    }
+
+    public void Damage()
+    {
+        if (difficultyManager == null) return;
+
+        if (difficultyManager.difficulty == DifficultyType.Normal)
+        {
+            if (gameManager.fruitsCollected > 0)
+                gameManager.FruitDropped();
+            else
+            {
+                Die();
+                gameManager.RestartLevel();
+            }
+        }
+        else if (difficultyManager.difficulty == DifficultyType.Hard)
+        {
+            Die();
+            gameManager.RestartLevel();
+        }
     }
 
     void UpdateSkin()

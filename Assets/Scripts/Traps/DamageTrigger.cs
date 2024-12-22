@@ -14,6 +14,7 @@ public class DamageTrigger : MonoBehaviour
 
         if (player != null)
         {
+            player.Damage();
             player.KnockBack(transform, knockBackSpeed, knockBackDuration);
         }
     }

@@ -12,6 +12,8 @@ public class MainMenu : MonoBehaviour
     Button[] buttons;
 
     [SerializeField] Button continueButton;
+    DifficultyType continueDifficulty;
+    int continueSkinIndex;
 
     [SerializeField] float fadeDuration = 0.5f;
     FadeInOut fadeEffect;
@@ -61,6 +63,13 @@ public class MainMenu : MonoBehaviour
                     continueButton.gameObject.SetActive(false);
                     continueButton.enabled = false;
                     continue;
+                }
+                else
+                {
+                    continueSkinIndex = PlayerPrefs.GetInt("LastSkinPlayed");
+                    continueDifficulty = (DifficultyType)PlayerPrefs.GetInt("LastDifficulty");
+                    SkinManager.instance.selectedSkinIndex = continueSkinIndex;
+                    DifficultyManager.instance.SetDifficulty(continueDifficulty);
                 }
             }
             button.enabled = true;
