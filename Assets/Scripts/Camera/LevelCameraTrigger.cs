@@ -9,10 +9,7 @@ public class LevelCameraTrigger : MonoBehaviour
         levelCamera = GetComponentInParent<LevelCamera>();
     }
 
-    void Start()
-    {
-        levelCamera.EnableCamera(false);
-    }
+    public void Start() => levelCamera.EnableCamera(false);
 
     private void OnTriggerEnter2D(Collider2D collision)
     {

@@ -39,6 +39,11 @@ public class SkinSelection : MonoBehaviour
         UpdateBankBalanceDisplay();
     }
 
+    private void OnEnable()
+    {
+        UpdateSkin();
+    }
+
     public void NextSkin()
     {
         skinIndex = (skinIndex + 1) % totalSkinCount;
@@ -58,6 +63,7 @@ public class SkinSelection : MonoBehaviour
             SkinManager.instance.selectedSkinIndex = skinIndex;
             PlayerPrefs.SetInt("LastSkinPlayed", skinIndex);
             menu.SwitchUI(uiElementToEnable);
+            menu.MoveCameraToMainMenu();
         }
         if (!skins[skinIndex].unlocked)
         {

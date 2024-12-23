@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -19,6 +20,11 @@ public class MainMenu : MonoBehaviour
     FadeInOut fadeEffect;
 
     [SerializeField] GameObject[] uiElements;
+
+    [Header("Camera")]
+    [SerializeField] CinemachineCamera cinemachineCamera;
+    [SerializeField] Transform mainMenuPoint;
+    [SerializeField] Transform skinSelectionPoint;
 
     void Awake()
     {
@@ -47,6 +53,10 @@ public class MainMenu : MonoBehaviour
         }
         uiElementToEnable.SetActive(true);
     }
+
+    public void MoveCameraToSkinSelection() => cinemachineCamera.Follow = skinSelectionPoint;
+
+    public void MoveCameraToMainMenu() => cinemachineCamera.Follow = mainMenuPoint;
 
     void LoadLevelScene() => SceneManager.LoadScene(sceneName);
 
