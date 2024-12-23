@@ -122,6 +122,8 @@ public class Player : MonoBehaviour
         {
             Enemy enemy = enemyCollider.GetComponent<Enemy>();
             if (enemy == null) continue;
+            AudioManager.instance.PlaySfx(1);
+
             enemy.Die();
             Jump();
         }
@@ -145,6 +147,8 @@ public class Player : MonoBehaviour
 
     public void Die()
     {
+        AudioManager.instance.PlaySfx(0, false);
+
         Destroy(gameObject);
         Instantiate(playerDeathVfx, transform.position, Quaternion.identity);
     }
@@ -176,14 +180,23 @@ public class Player : MonoBehaviour
 
     void Jump()
     {
+        AudioManager.instance.PlaySfx(3);
+
         rb.linearVelocity = new Vector2(xInput, jumpSpeed);
         canDoubleJump = true;
     }
 
-    void DoubleJump() => rb.linearVelocity = new Vector2(xInput, doubleJumpSpeed);
+    void DoubleJump()
+    {
+        AudioManager.instance.PlaySfx(3);
+
+        rb.linearVelocity = new Vector2(xInput, doubleJumpSpeed);
+    }
 
     void WallJump()
     {
+        AudioManager.instance.PlaySfx(12);
+
         isWallJumping = true;
         Flip();
         rb.linearVelocity += new Vector2(wallJumpSpeed.x * Math.Sign(transform.right.x), wallJumpSpeed.y);

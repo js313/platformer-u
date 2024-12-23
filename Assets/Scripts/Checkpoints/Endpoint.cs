@@ -16,6 +16,8 @@ public class Endpoint : MonoBehaviour
     {
         if (active) return;
 
+        AudioManager.instance.PlaySfx(2);
+
         Player player = collision.GetComponent<Player>();
         if (player != null)
         {

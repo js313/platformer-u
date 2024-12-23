@@ -20,6 +20,8 @@ public class LevelButton : MonoBehaviour
 
     public void LoadLevel()
     {
+        AudioManager.instance.PlaySfx(4);
+
         SceneManager.LoadScene("Level_" + levelIndex);
     }
 }

@@ -31,6 +31,8 @@ public class Fruit : MonoBehaviour
         Player player = collision.GetComponent<Player>();
         if (player != null)
         {
+            AudioManager.instance.PlaySfx(8);
+
             gameManager.FruitCollected();
             Destroy(gameObject);
             Instantiate(pickupVFX, transform.position, Quaternion.identity);

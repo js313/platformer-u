@@ -42,6 +42,8 @@ public class MainMenu : MonoBehaviour
 
     public void NewGame()
     {
+        AudioManager.instance.PlaySfx(4);
+
         fadeEffect.Fade(0, 1, fadeDuration, LoadLevelScene);
     }
 
@@ -52,6 +54,8 @@ public class MainMenu : MonoBehaviour
             uiElement.SetActive(false);
         }
         uiElementToEnable.SetActive(true);
+
+        AudioManager.instance.PlaySfx(4);
     }
 
     public void MoveCameraToSkinSelection() => cinemachineCamera.Follow = skinSelectionPoint;
@@ -60,7 +64,14 @@ public class MainMenu : MonoBehaviour
 
     void LoadLevelScene() => SceneManager.LoadScene(sceneName);
 
-    public void LoadLastLevel() => SceneManager.LoadScene("Level_" + continueSceneIndex);
+    public void LoadLastLevel()
+    {
+        AudioManager.instance.PlaySfx(4);
+
+        fadeEffect.Fade(0, 1, fadeDuration, LoadLastLevelScene);
+    }
+
+    void LoadLastLevelScene() => SceneManager.LoadScene("Level_" + continueSceneIndex);
 
     void EnableMenuButtons()
     {

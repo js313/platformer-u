@@ -46,12 +46,16 @@ public class SkinSelection : MonoBehaviour
 
     public void NextSkin()
     {
+        AudioManager.instance.PlaySfx(4);
+
         skinIndex = (skinIndex + 1) % totalSkinCount;
         UpdateSkin();
     }
 
     public void PreviousSkin()
     {
+        AudioManager.instance.PlaySfx(4);
+
         skinIndex = (skinIndex - 1 + totalSkinCount) % totalSkinCount;
         UpdateSkin();
     }
@@ -60,6 +64,8 @@ public class SkinSelection : MonoBehaviour
     {
         if (skins[skinIndex].unlocked)
         {
+            AudioManager.instance.PlaySfx(4);
+
             SkinManager.instance.selectedSkinIndex = skinIndex;
             PlayerPrefs.SetInt("LastSkinPlayed", skinIndex);
             menu.SwitchUI(uiElementToEnable);
@@ -68,7 +74,14 @@ public class SkinSelection : MonoBehaviour
         if (!skins[skinIndex].unlocked)
         {
             int remainingBankBalance = PlayerPrefs.GetInt("FruitsInBank") - skins[skinIndex].skinPrice;
-            if (remainingBankBalance < 0) return;
+            if (remainingBankBalance < 0)
+            {
+                AudioManager.instance.PlaySfx(6);
+
+                return;
+            }
+
+            AudioManager.instance.PlaySfx(10);
 
             PlayerPrefs.SetInt("FruitsInBank", remainingBankBalance);
             PlayerPrefs.SetInt("Skin" + skins[skinIndex].skinName + "Unlocked", 1);
