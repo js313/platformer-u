@@ -8,13 +8,6 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
-    [Header("Player")]
-    [SerializeField] Player playerPrefab;
-    [SerializeField] float respawnDelay;
-    public Player player;
-
-    [SerializeField] Transform playerRespawnPoint;
-
     [Header("Fruits")]
     public int totalFruits;
     public int fruitsCollected = 0;
@@ -28,6 +21,10 @@ public class GameManager : MonoBehaviour
 
     [Header("Managers")]
     [SerializeField] AudioManager audioManager;
+    [SerializeField] PlayerManager playerManager;
+    [SerializeField] DifficultyManager difficultyManager;
+    [SerializeField] SkinManager skinManager;
+
 
     [SerializeField] int currentLevelIndex;
     int nextLevelIndex;
@@ -57,12 +54,6 @@ public class GameManager : MonoBehaviour
         gameUI.UpdateFruitCounter(0, totalFruits);
         PlayerPrefs.SetInt("Level" + currentLevelIndex + "TotalFruits", totalFruits);
         levelTimer = 0;
-
-        //if (playerRespawnPoint == null)
-        //    playerRespawnPoint = FindFirstObjectByType<Startpoint>().transform;
-        //if (player == null)
-        //    player = FindFirstObjectByType<Player>();
-
         CreateManagers();
     }
 
@@ -79,6 +70,21 @@ public class GameManager : MonoBehaviour
         {
             Instantiate(audioManager);
         }
+
+        if (PlayerManager.instance == null)
+        {
+            Instantiate(playerManager);
+        }
+
+        if (DifficultyManager.instance == null)
+        {
+            Instantiate(difficultyManager);
+        }
+
+        if (SkinManager.instance == null)
+        {
+            Instantiate(skinManager);
+        }
     }
 
     public void RestartLevel()
@@ -91,17 +97,6 @@ public class GameManager : MonoBehaviour
     private void LoadTheEndScene() => SceneManager.LoadScene("TheEnd");
 
     public void PauseUnpauseGame(bool isPaused) => isGamePaused = isPaused;
-
-    public void RespawnPlayer() => StartCoroutine(RespawnCoroutine());
-
-    IEnumerator RespawnCoroutine()
-    {
-        yield return new WaitForSeconds(respawnDelay);
-
-        player = Instantiate(playerPrefab, playerRespawnPoint.position, Quaternion.identity);
-    }
-
-    public void UpdatePlayerRespawnPoint(Transform newPlayerRespawnPoint) => playerRespawnPoint = newPlayerRespawnPoint;
 
     public void FruitCollected()
     {

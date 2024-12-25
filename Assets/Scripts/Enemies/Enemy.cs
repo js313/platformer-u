@@ -52,7 +52,7 @@ public class Enemy : MonoBehaviour
 
     protected void Start()
     {
-        player = GameManager.instance.player;
+        player = PlayerManager.instance.player;
 
         if (transform.eulerAngles.y == 180) facingRight = !facingRight;
     }

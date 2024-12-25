@@ -1297,6 +1297,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1737896830142936795, guid: a96ed1d0a2319b6448a6bb9d1dc94762, type: 3}
+      propertyPath: currentLevelIndex
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 4941347579868751507, guid: a96ed1d0a2319b6448a6bb9d1dc94762, type: 3}
       propertyPath: m_Name
       value: GameManager
@@ -31052,6 +31056,7 @@ Transform:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 1350751169}
   - {fileID: 724626946}
   - {fileID: 2395848784834800114}
   - {fileID: 529612304}
@@ -31066,4 +31071,3 @@ SceneRoots:
   - {fileID: 1141542430}
   - {fileID: 968687249}
   - {fileID: 1020515610}
-  - {fileID: 1350751169}
