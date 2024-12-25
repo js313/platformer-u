@@ -9,9 +9,9 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
 
     [Header("Player")]
-    public Player player;
     [SerializeField] Player playerPrefab;
     [SerializeField] float respawnDelay;
+    public Player player;
 
     [SerializeField] Transform playerRespawnPoint;
 
@@ -25,6 +25,9 @@ public class GameManager : MonoBehaviour
 
     [Header("Fade")]
     [SerializeField] float fadeDuration = 0.75f;
+
+    [Header("Managers")]
+    [SerializeField] AudioManager audioManager;
 
     [SerializeField] int currentLevelIndex;
     int nextLevelIndex;
@@ -54,6 +57,13 @@ public class GameManager : MonoBehaviour
         gameUI.UpdateFruitCounter(0, totalFruits);
         PlayerPrefs.SetInt("Level" + currentLevelIndex + "TotalFruits", totalFruits);
         levelTimer = 0;
+
+        //if (playerRespawnPoint == null)
+        //    playerRespawnPoint = FindFirstObjectByType<Startpoint>().transform;
+        //if (player == null)
+        //    player = FindFirstObjectByType<Player>();
+
+        CreateManagers();
     }
 
     void Update()
@@ -61,6 +71,14 @@ public class GameManager : MonoBehaviour
         levelTimer += Time.deltaTime;
 
         gameUI.UpdateTimer(levelTimer);
+    }
+
+    void CreateManagers()
+    {
+        if (AudioManager.instance == null)
+        {
+            Instantiate(audioManager);
+        }
     }
 
     public void RestartLevel()
