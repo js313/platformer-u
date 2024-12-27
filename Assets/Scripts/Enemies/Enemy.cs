@@ -52,7 +52,8 @@ public class Enemy : MonoBehaviour
 
     protected void Start()
     {
-        player = PlayerManager.instance.player;
+        AssignPlayer();
+        PlayerManager.OnPlayerRespawn += AssignPlayer;
 
         if (transform.eulerAngles.y == 180) facingRight = !facingRight;
     }
@@ -64,13 +65,13 @@ public class Enemy : MonoBehaviour
         HandleCollision();
     }
 
+    void AssignPlayer() => player = PlayerManager.instance.player;
+
     [ContextMenu("Flip facing direction")]
     public void ChangeDefaultFacingDirection()
     {
         float newRotation = transform.rotation.eulerAngles.y == 180 ? 0 : 180;
-        transform.eulerAngles = new Vector3(transform.eulerAngles.x,
-                                            newRotation,
-                                            transform.eulerAngles.z);
+        transform.eulerAngles = new Vector3(transform.eulerAngles.x, newRotation, transform.eulerAngles.z);
     }
 
     protected void Flip()
@@ -94,6 +95,7 @@ public class Enemy : MonoBehaviour
         damageTrigger.gameObject.SetActive(false);
         rb.linearVelocity = new Vector2(0, deathEffectSpeed);
         if (Random.Range(0, 1) >= 0.5f) deathRotationDirection = -1;
+        PlayerManager.OnPlayerRespawn -= AssignPlayer;
         Destroy(gameObject, destroyAfter);
     }
 

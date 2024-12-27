@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Cinemachine;
 using UnityEngine;
 
 public class Rhino : Enemy
@@ -14,10 +15,16 @@ public class Rhino : Enemy
     [SerializeField] Vector2 impactForce;
     bool wallCollision = false;
 
+    [Header("VFX")]
+    [SerializeField] ParticleSystem dustVfx;
+    [SerializeField] Vector2 cameraShakeImpulse;
+    CinemachineImpulseSource cinemachineImpulse;
+
     protected override void Awake()
     {
         base.Awake();
         currentMoveSpeed = moveSpeed;
+        cinemachineImpulse = GetComponent<CinemachineImpulseSource>();
     }
 
     protected override void Update()
@@ -36,9 +43,17 @@ public class Rhino : Enemy
         if (isFacingWall && !isDead)
         {
             wallCollision = true;
+            HitWallEffects();
             anim.SetBool("hitWall", true);
             rb.linearVelocity = new Vector2(impactForce.x * (facingRight ? -1 : 1), impactForce.y);
         }
+    }
+
+    void HitWallEffects()
+    {
+        dustVfx.Play();
+        cinemachineImpulse.DefaultVelocity = cameraShakeImpulse;
+        cinemachineImpulse.GenerateImpulse();
     }
 
     public void EndWallCollision()

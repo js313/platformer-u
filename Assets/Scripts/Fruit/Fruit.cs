@@ -14,19 +14,19 @@ public class Fruit : MonoBehaviour
     [SerializeField]
     GameObject pickupVFX;
 
-    void Awake()
+    protected virtual void Awake()
     {
         anim = GetComponentInChildren<Animator>();
     }
 
-    void Start()    // Not assigned in Awake() as it might get called before GameManager's Awake()
+    protected virtual void Start()    // Don't assign in Awake() as it might get called before GameManager's Awake()
     {
         gameManager = GameManager.instance;
         if (GameManager.instance.GetRandomizeFruits()) SetRandomLook();
         else SetLook((int)type);
     }
 
-    void OnTriggerEnter2D(Collider2D collision)
+    protected virtual void OnTriggerEnter2D(Collider2D collision)
     {
         Player player = collision.GetComponent<Player>();
         if (player != null)

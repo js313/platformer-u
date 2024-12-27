@@ -49,6 +49,7 @@ public class Player : MonoBehaviour
     [Header("VFX")]
     [SerializeField] GameObject playerDeathVfx;
     [SerializeField] AnimatorOverrideController[] controllers;
+    [SerializeField] ParticleSystem dustVfx;
 
     bool isKnocked;
     bool facingRight = true;
@@ -85,7 +86,7 @@ public class Player : MonoBehaviour
 
     public void Damage()
     {
-        if (difficultyManager == null) return;
+        if (difficultyManager == null || isKnocked) return;
 
         if (difficultyManager.difficulty == DifficultyType.Normal)
         {
@@ -180,6 +181,7 @@ public class Player : MonoBehaviour
 
     void Jump()
     {
+        dustVfx.Play();
         AudioManager.instance.PlaySfx(3);
 
         rb.linearVelocity = new Vector2(xInput, jumpSpeed);
@@ -188,6 +190,7 @@ public class Player : MonoBehaviour
 
     void DoubleJump()
     {
+        //dustVfx.Play();
         AudioManager.instance.PlaySfx(3);
 
         rb.linearVelocity = new Vector2(xInput, doubleJumpSpeed);
@@ -235,6 +238,7 @@ public class Player : MonoBehaviour
         if (isWallDetected || isOnGround)
         {
             isWallJumping = false;
+            if (isOnGround && wentOffTheGroundAt != -1) dustVfx.Play();
             wentOffTheGroundAt = -1;
         }
         if (!isOnGround && rb.linearVelocity.y < 0 && wentOffTheGroundAt == -1) wentOffTheGroundAt = Time.time;

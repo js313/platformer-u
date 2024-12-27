@@ -12,6 +12,8 @@ public class GameManager : MonoBehaviour
     public int totalFruits;
     public int fruitsCollected = 0;
     public bool randomizeFruits = false;
+    [SerializeField] DroppedFruit droppedFruit;
+    [SerializeField] Transform fruitsParent;
 
     [Header("Checkpoints")]
     public bool canCheckpointsBeReActivated = false;
@@ -24,7 +26,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] PlayerManager playerManager;
     [SerializeField] DifficultyManager difficultyManager;
     [SerializeField] SkinManager skinManager;
-
 
     [SerializeField] int currentLevelIndex;
     int nextLevelIndex;
@@ -44,6 +45,7 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
         nextLevelIndex = currentLevelIndex + 1;
+        CreateManagers();
     }
 
     private void Start()
@@ -54,7 +56,6 @@ public class GameManager : MonoBehaviour
         gameUI.UpdateFruitCounter(0, totalFruits);
         PlayerPrefs.SetInt("Level" + currentLevelIndex + "TotalFruits", totalFruits);
         levelTimer = 0;
-        CreateManagers();
     }
 
     void Update()
@@ -106,6 +107,9 @@ public class GameManager : MonoBehaviour
 
     public void FruitDropped()
     {
+        DroppedFruit droppedFruitInstance = Instantiate(droppedFruit);
+        droppedFruitInstance.transform.position = PlayerManager.instance.player.transform.position;
+        if (fruitsParent != null) droppedFruitInstance.transform.SetParent(fruitsParent);
         fruitsCollected--;
         gameUI.UpdateFruitCounter(fruitsCollected, totalFruits);
     }

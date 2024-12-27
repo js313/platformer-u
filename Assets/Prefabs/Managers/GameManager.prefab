@@ -47,6 +47,8 @@ MonoBehaviour:
   totalFruits: 0
   fruitsCollected: 0
   randomizeFruits: 0
+  droppedFruit: {fileID: 4566090049674602007, guid: 8e84460de7ba684438a4d9d30cdc9889, type: 3}
+  fruitsParent: {fileID: 0}
   canCheckpointsBeReActivated: 0
   fadeDuration: 1
   audioManager: {fileID: 8654170183952230502, guid: cc199fc6bbe09d747a44e2e98cdde48e, type: 3}
