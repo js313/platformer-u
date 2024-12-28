@@ -9,6 +9,8 @@ public class GameUI : MonoBehaviour
 
     FadeInOut fadeEffect;
 
+    PlayerInput playerInput;
+
     [SerializeField] TextMeshProUGUI fruitCounter;
     [SerializeField] TextMeshProUGUI timer;
 
@@ -19,16 +21,29 @@ public class GameUI : MonoBehaviour
     {
         if (instance == null) instance = this;
         fadeEffect = GetComponentInChildren<FadeInOut>();
+
+        playerInput = new PlayerInput();
     }
 
-    void Update()
+    void OnEnable()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            isGamePaused = !isGamePaused;
-            if (isGamePaused) PauseGame();
-            else UnPauseGame();
-        }
+        playerInput.Enable();
+
+        playerInput.UI.Pause.performed += (ctx) => PausePressed();
+    }
+
+    void OnDisable()
+    {
+        playerInput.Disable();
+
+        playerInput.UI.Pause.performed -= (ctx) => PausePressed();
+    }
+
+    void PausePressed()
+    {
+        isGamePaused = !isGamePaused;
+        if (isGamePaused) PauseGame();
+        else UnPauseGame();
     }
 
     void PauseGame()

@@ -13,14 +13,15 @@ public class Player : MonoBehaviour
     GameManager gameManager;
     DifficultyManager difficultyManager;
 
+    PlayerInput playerInput;
+
     bool hasControlAndPhysics = false;
 
     [Header("Movement")]
     [SerializeField] float speed;
     [SerializeField] float jumpSpeed;
     [SerializeField] float doubleJumpSpeed;
-    float xInput;
-    float yInput;
+    Vector2 moveInput;
     bool jumpInput;
     bool canDoubleJump = true;
 
@@ -59,6 +60,25 @@ public class Player : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         cd = GetComponent<Collider2D>();
         anim = GetComponentInChildren<Animator>();
+        playerInput = new PlayerInput();
+    }
+
+    void OnEnable()
+    {
+        playerInput.Enable();
+
+        playerInput.Player.Jump.performed += ctx => HandleJump();
+        playerInput.Player.Movement.performed += ctx => moveInput = ctx.ReadValue<Vector2>();
+        playerInput.Player.Movement.canceled += ctx => moveInput = Vector2.zero;
+    }
+
+    void OnDisable()
+    {
+        playerInput.Disable();
+
+        playerInput.Player.Jump.performed -= ctx => HandleJump();
+        playerInput.Player.Movement.performed -= ctx => moveInput = ctx.ReadValue<Vector2>();
+        playerInput.Player.Movement.canceled -= ctx => moveInput = Vector2.zero;
     }
 
     void Start()
@@ -75,7 +95,7 @@ public class Player : MonoBehaviour
         HandleAnimation();
         if (isKnocked || !hasControlAndPhysics) return;  // Prevent movemnt of any kind while knocked
 
-        HandleInput();
+        // HandleInput();
         HandleWallSlide();
         HandleMovement();
         HandleEnemyDetection();
@@ -156,14 +176,14 @@ public class Player : MonoBehaviour
 
     void HandleWallSlide()
     {
-        float yVelocityModifier = yInput < 0 ? 1f : 0.5f;
+        float yVelocityModifier = moveInput.y < 0 ? 1f : 0.5f;
         if (isWallDetected && rb.linearVelocity.y < 0)
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, rb.linearVelocity.y * yVelocityModifier);
     }
 
     void HandleFlip()
     {
-        if ((xInput < 0 && facingRight) || (xInput > 0 && !facingRight)) Flip();
+        if ((moveInput.x < 0 && facingRight) || (moveInput.x > 0 && !facingRight)) Flip();
     }
 
     void Flip()
@@ -174,9 +194,9 @@ public class Player : MonoBehaviour
 
     void HandleInput()
     {
-        xInput = Input.GetAxisRaw("Horizontal");
-        yInput = Input.GetAxisRaw("Vertical");
-        jumpInput = Input.GetKeyDown(KeyCode.Space);
+        // xInput = Input.GetAxisRaw("Horizontal");
+        // yInput = Input.GetAxisRaw("Vertical");
+        // jumpInput = Input.GetKeyDown(KeyCode.Space);
     }
 
     void Jump()
@@ -184,7 +204,7 @@ public class Player : MonoBehaviour
         dustVfx.Play();
         AudioManager.instance.PlaySfx(3);
 
-        rb.linearVelocity = new Vector2(xInput, jumpSpeed);
+        rb.linearVelocity = new Vector2(moveInput.x, jumpSpeed);
         canDoubleJump = true;
     }
 
@@ -193,7 +213,7 @@ public class Player : MonoBehaviour
         //dustVfx.Play();
         AudioManager.instance.PlaySfx(3);
 
-        rb.linearVelocity = new Vector2(xInput, doubleJumpSpeed);
+        rb.linearVelocity = new Vector2(moveInput.x, doubleJumpSpeed);
     }
 
     void WallJump()
@@ -233,52 +253,54 @@ public class Player : MonoBehaviour
     {
         if (!isWallDetected && !isWallJumping)
         {
-            rb.linearVelocity = new Vector2(xInput * speed, rb.linearVelocity.y);
+            rb.linearVelocity = new Vector2(moveInput.x * speed, rb.linearVelocity.y);
         }
         if (isWallDetected || isOnGround)
         {
-            isWallJumping = false;
             if (isOnGround && wentOffTheGroundAt != -1) dustVfx.Play();
             wentOffTheGroundAt = -1;
         }
+        if (isWallJumping && isOnGround) isWallJumping = false;
         if (!isOnGround && rb.linearVelocity.y < 0 && wentOffTheGroundAt == -1) wentOffTheGroundAt = Time.time;
-        if (jumpInput)
-        {
-            //print("Input:- ");
-            if (isOnGround)
-            {
-                //print("Normal Jump!!");
-                Jump();
-            }
-            else if (isWallDetected)
-            {
-                //print("Wall Jump!!");
-                WallJump();
-            }
-            else if (canDoubleJump)
-            {
-                //print("Double Jump!!");
-                isWallJumping = false;
-                DoubleJump();
-                canDoubleJump = false;
-            }
-            else
-            {
-                bufferInputReceived = Time.time;
-                if (Time.time < wentOffTheGroundAt + coyoteJumpWindow)
-                {
-                    //print("Coyote Jump!!");
-                    wentOffTheGroundAt = -1;
-                    Jump();
-                }
-            }
-            wentOffTheGroundAt = -2;
-        }
+
         if (isOnGround && Time.time < bufferInputReceived + bufferJumpWindow)
         {
-            //print("Buffered Jump!!");
+            // print("Buffered Jump!!");
             bufferInputReceived = -1;   // Should be set to <= -bufferJumpWindow
             Jump();
+        }
+    }
+
+    void HandleJump()
+    {
+        if (gameManager.isGamePaused) return;
+        if (isOnGround)
+        {
+            // print("Normal Jump!!");
+            Jump();
+        }
+        else if (isWallDetected && !isWallJumping)
+        {
+            // print("Wall Jump!!");
+            WallJump();
+        }
+        else if (canDoubleJump)
+        {
+            // print("Double Jump!!");
+            isWallJumping = false;
+            DoubleJump();
+            canDoubleJump = false;
+        }
+        else
+        {
+            bufferInputReceived = Time.time;
+            if (Time.time < wentOffTheGroundAt + coyoteJumpWindow)
+            {
+                // print("Coyote Jump!!");
+                wentOffTheGroundAt = -1;
+                Jump();
+            }
+            wentOffTheGroundAt = -2;
         }
     }
 
