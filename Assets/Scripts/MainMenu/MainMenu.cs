@@ -2,11 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Cinemachine;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
+    DefaultInputActions defaultInput;
+    GameObject lastSelected;
     public string sceneName;
     int continueSceneIndex;
 
@@ -31,6 +35,13 @@ public class MainMenu : MonoBehaviour
         fadeEffect = GetComponentInChildren<FadeInOut>();
         buttons = GetComponentsInChildren<Button>();
         DisableMenuButtons();
+        defaultInput = new DefaultInputActions();
+    }
+
+    void OnEnable()
+    {
+        defaultInput.Enable();
+        defaultInput.UI.Navigate.performed += ctx => UpdateSelected();
     }
 
     void Start()
@@ -38,6 +49,16 @@ public class MainMenu : MonoBehaviour
         fadeEffect.Fade(1, 0, fadeDuration, EnableMenuButtons);
         continueSceneIndex = PlayerPrefs.GetInt("ContinueLevelNumber");
         if (continueSceneIndex == 0) continueButton.gameObject.SetActive(false);
+    }
+
+    void UpdateSelected()
+    {
+        if (EventSystem.current.currentSelectedGameObject == null) EventSystem.current.SetSelectedGameObject(lastSelected);
+    }
+
+    public void UpdateLastSelected(GameObject newLastSelected)
+    {
+        lastSelected = newLastSelected;
     }
 
     public void NewGame()
