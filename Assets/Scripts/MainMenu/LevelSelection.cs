@@ -1,15 +1,36 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 public class LevelSelection : MonoBehaviour
 {
+    MainMenu menu;
+    [SerializeField] GameObject firstSelected;
+    DefaultInputActions inputActions;
+
     [SerializeField] LevelButton LevelButtonPrefab;
     [SerializeField] Transform buttonParent;
 
-    void Start()
+    private void Awake()
     {
+        menu = GetComponentInParent<MainMenu>();
+        inputActions = new DefaultInputActions();
         PlayerPrefs.SetInt("Level1Unlocked", 1);
         CreateButton();
+    }
+    
+    private void OnEnable()
+    {
+        menu.UpdateLastSelected(firstSelected);
+        if(firstSelected != null) EventSystem.current.SetSelectedGameObject(firstSelected);
+        else EventSystem.current.SetSelectedGameObject(buttonParent.GetChild(0).gameObject);
+        inputActions.Enable();
+    }
+
+    private void OnDisable()
+    {
+        inputActions.Disable();
     }
 
     public void CreateButton()

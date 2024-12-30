@@ -1,6 +1,8 @@
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 
 [Serializable]
 struct Skin
@@ -12,6 +14,9 @@ struct Skin
 
 public class SkinSelection : MonoBehaviour
 {
+    [SerializeField] GameObject firstSelected;
+    DefaultInputActions inputActions;
+
     MainMenu menu;
 
     [SerializeField] int skinIndex;
@@ -27,6 +32,7 @@ public class SkinSelection : MonoBehaviour
     private void Awake()
     {
         menu = transform.parent.GetComponentInChildren<MainMenu>();
+        inputActions = new DefaultInputActions();
     }
 
     private void Start()
@@ -42,6 +48,24 @@ public class SkinSelection : MonoBehaviour
     private void OnEnable()
     {
         UpdateSkin();
+        menu.UpdateLastSelected(firstSelected);
+        EventSystem.current.SetSelectedGameObject(firstSelected);
+        inputActions.Enable();
+        inputActions.UI.Navigate.performed += ctx =>
+        {
+            if (ctx.ReadValue<Vector2>().x <= -1) PreviousSkin();
+            else if (ctx.ReadValue<Vector2>().x >= 1) NextSkin();
+        };
+    }
+
+    private void OnDisable()
+    {
+        inputActions.Disable();
+        inputActions.UI.Navigate.performed -= ctx =>
+        {
+            if (ctx.ReadValue<Vector2>().x <= -1) PreviousSkin();
+            else if (ctx.ReadValue<Vector2>().x >= 1) NextSkin();
+        };
     }
 
     public void NextSkin()

@@ -1,6 +1,7 @@
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
 public class GameUI : MonoBehaviour
@@ -11,6 +12,7 @@ public class GameUI : MonoBehaviour
 
     PlayerInput playerInput;
 
+    [SerializeField] GameObject firstSelected;
     [SerializeField] TextMeshProUGUI fruitCounter;
     [SerializeField] TextMeshProUGUI timer;
 
@@ -27,6 +29,7 @@ public class GameUI : MonoBehaviour
 
     void OnEnable()
     {
+        EventSystem.current.SetSelectedGameObject(firstSelected);
         playerInput.Enable();
 
         playerInput.UI.Pause.performed += (ctx) => PausePressed();

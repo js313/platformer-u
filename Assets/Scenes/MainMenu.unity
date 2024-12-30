@@ -5227,7 +5227,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -6690,7 +6690,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -7119,6 +7119,7 @@ GameObject:
   m_Component:
   - component: {fileID: 668343183}
   - component: {fileID: 668343184}
+  - component: {fileID: 668343185}
   m_Layer: 5
   m_Name: SFXVolume
   m_TagString: Untagged
@@ -7173,7 +7174,7 @@ MonoBehaviour:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_SelectedColor: {r: 1, g: 0, b: 0, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -7212,6 +7213,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &668343185
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 668343182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19b40b91f8efaa14f805ac22987261ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &707722004
 GameObject:
   m_ObjectHideFlags: 0
@@ -7996,10 +8009,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 4
     m_WrapAround: 0
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
+    m_SelectOnUp: {fileID: 1520674290}
+    m_SelectOnDown: {fileID: 1520674290}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
@@ -10551,10 +10564,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 4
     m_WrapAround: 0
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
+    m_SelectOnUp: {fileID: 815043738}
+    m_SelectOnDown: {fileID: 815043738}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
@@ -11030,6 +11043,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1629502910}
   - component: {fileID: 1629502911}
+  - component: {fileID: 1629502912}
   m_Layer: 5
   m_Name: MusicVolume
   m_TagString: Untagged
@@ -11084,7 +11098,7 @@ MonoBehaviour:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_SelectedColor: {r: 1, g: 0, b: 0, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -11123,6 +11137,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &1629502912
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1629502909}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19b40b91f8efaa14f805ac22987261ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1699553857
 GameObject:
   m_ObjectHideFlags: 0
@@ -11475,6 +11501,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63388a0c735305b4f98f8e218a5bb1e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  firstSelected: {fileID: 668343182}
   audioMixer: {fileID: 24100000, guid: 8c2763e6ae767d64688fb936768e3897, type: 2}
   mixerMultiplier: 20
   sfxSlider: {fileID: 668343184}
@@ -11841,6 +11868,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37d68c62853f25e4099f5f73b9bbd9c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  firstSelected: {fileID: 815043736}
   skinIndex: 0
   totalSkinCount: 4
   skinDisplay: {fileID: 765943114}
@@ -12057,6 +12085,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbd1ebd30d864064dbde2d71f59f2fca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  firstSelected: {fileID: 0}
   LevelButtonPrefab: {fileID: 2982140711805014544, guid: db00e75922acf0a4e98f45c8a6a2d0c0, type: 3}
   buttonParent: {fileID: 330096045}
 --- !u!1 &2124039846

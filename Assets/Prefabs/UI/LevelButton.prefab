@@ -285,6 +285,7 @@ GameObject:
   - component: {fileID: 8266337908022099479}
   - component: {fileID: 6459044964149799153}
   - component: {fileID: 2982140711805014544}
+  - component: {fileID: 1292404836289228573}
   m_Layer: 5
   m_Name: LevelButton
   m_TagString: Untagged
@@ -335,7 +336,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.40566033, g: 0.64980686, b: 1, a: 0.7058824}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -373,10 +374,10 @@ MonoBehaviour:
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.3075471, g: 0.5841082, b: 1, a: 1}
+    m_NormalColor: {r: 0.40392157, g: 0.6509804, b: 1, a: 0.7058824}
+    m_HighlightedColor: {r: 1, g: 0.38240933, b: 0.30588233, a: 0.74509805}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_SelectedColor: {r: 1, g: 0.3075471, b: 0.3075471, a: 0.65882355}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -423,6 +424,18 @@ MonoBehaviour:
   levelNumberText: {fileID: 791364657221213661}
   bestTimeText: {fileID: 5056359409478511906}
   fruitsInfoText: {fileID: 939124242485361344}
+--- !u!114 &1292404836289228573
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6187222602885148609}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19b40b91f8efaa14f805ac22987261ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7311284639027779538
 GameObject:
   m_ObjectHideFlags: 0

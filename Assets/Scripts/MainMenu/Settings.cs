@@ -1,10 +1,16 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class Settings : MonoBehaviour
 {
+    MainMenu menu;
+    [SerializeField] GameObject firstSelected;
+    DefaultInputActions inputActions;
+
     [SerializeField] AudioMixer audioMixer;
     [SerializeField] float mixerMultiplier = 20;
 
@@ -19,6 +25,12 @@ public class Settings : MonoBehaviour
     [SerializeField] TextMeshProUGUI musicPercent;
     [SerializeField] string musicParameter;
     float musicValue;
+
+    private void Awake()
+    {
+        menu = GetComponentInParent<MainMenu>();
+        inputActions = new DefaultInputActions();
+    }
 
     public void SfxSliderValue(float value)
     {
@@ -38,6 +50,7 @@ public class Settings : MonoBehaviour
     {
         PlayerPrefs.SetFloat("sfxVolume", sfxValue);
         PlayerPrefs.SetFloat("musicVolume", musicValue);
+        inputActions.Disable();
     }
 
     private void OnEnable()
@@ -48,5 +61,10 @@ public class Settings : MonoBehaviour
         MusicSliderValue(musicValue);
         sfxSlider.value = sfxValue;
         musicSlider.value = musicValue;
+
+        menu.UpdateLastSelected(firstSelected);
+        EventSystem.current.SetSelectedGameObject(firstSelected);
+        inputActions.Enable();
+
     }
 }
