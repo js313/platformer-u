@@ -94,6 +94,7 @@ public class Enemy : MonoBehaviour
         cd.enabled = false;
         damageTrigger.gameObject.SetActive(false);
         rb.linearVelocity = new Vector2(0, deathEffectSpeed);
+        if (rb.bodyType == RigidbodyType2D.Kinematic) rb.bodyType = RigidbodyType2D.Dynamic;
         if (Random.Range(0, 1) >= 0.5f) deathRotationDirection = -1;
         PlayerManager.OnPlayerRespawn -= AssignPlayer;
         Destroy(gameObject, destroyAfter);
