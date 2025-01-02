@@ -213,7 +213,7 @@ MonoBehaviour:
     m_Bits: 8
   whatIsEnemy:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 320
   enemyDetection: {fileID: 6998391303058741239}
   enemyDetectionRadius: 0.5
   wallJumpSpeed: {x: 8, y: 15}
