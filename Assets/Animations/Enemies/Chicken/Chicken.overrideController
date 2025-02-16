@@ -6,7 +6,7 @@ AnimatorOverrideController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: New Animator Override Controller
+  m_Name: Chicken
   m_Controller: {fileID: 9100000, guid: 331db89cf1c328b4ab59ab963db12f73, type: 2}
   m_Clips:
   - m_OriginalClip: {fileID: 7400000, guid: e9a73c0f6cc480544b4586ef53743cd0, type: 2}

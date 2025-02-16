@@ -9,7 +9,7 @@ public class Bee : Enemy
     Transform target;
     [SerializeField] float buzzSpeed;
     float nextAttackIn = 0;
-    Vector3[] buzzPoints = new Vector3[5];
+    readonly Vector3[] buzzPoints = new Vector3[5];
     int nextBuzzPoint = 0;
 
     protected override void Awake()

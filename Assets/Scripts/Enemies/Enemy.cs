@@ -50,7 +50,7 @@ public class Enemy : MonoBehaviour
         cd = GetComponent<Collider2D>();
     }
 
-    protected void Start()
+    protected virtual void Start()
     {
         AssignPlayer();
         PlayerManager.OnPlayerRespawn += AssignPlayer;
